@@ -1,0 +1,600 @@
+{
+  "name": "ContentSweep: drift-review",
+  "nodes": [
+    {
+      "id": "run-manually",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "config",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        230,
+        200
+      ],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"baseUrl\": \"https://mcp.contentsweep.ai\", \"feedCsv\": \"product_code,product_name,unit_price,currency,available\\n000123,Desk lamp,\\\"19,90\\\",EUR,12\\n000124,Reading light,\\\"24,50\\\",EUR,8\\n\", \"targetSchema\": {\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"sku\": {\"type\": \"string\"}, \"title\": {\"type\": \"string\"}, \"price\": {\"type\": \"string\", \"format\": \"decimal\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"EUR\"]}, \"stock\": {\"type\": \"integer\", \"minimum\": 0}}, \"required\": [\"sku\", \"title\", \"price\", \"currency\", \"stock\"]}, \"mapping\": [{\"source\": \"product_code\", \"target\": \"sku\", \"operation\": \"copy\"}, {\"source\": \"product_name\", \"target\": \"title\", \"operation\": \"copy\"}, {\"source\": \"unit_price\", \"target\": \"price\", \"operation\": \"decimal\", \"decimal_separator\": \",\"}, {\"source\": \"currency\", \"target\": \"currency\", \"operation\": \"copy\"}, {\"source\": \"available\", \"target\": \"stock\", \"operation\": \"integer\"}], \"contract\": {\"rules\": [{\"id\": \"unique-sku\", \"type\": \"unique\", \"column\": \"sku\"}]}, \"approvedByOperator\": false, \"profileId\": \"YOUR_APPROVED_PROFILE_ID\", \"originalJobId\": \"YOUR_REJECTED_JOB_ID\", \"idempotencyKey\": \"YOUR_UNIQUE_IMPORT_KEY\", \"reviewEmail\": \"YOUR_EMAIL\"}"
+      }
+    },
+    {
+      "id": "operator-approved",
+      "name": "Operator approved",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        460,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $('Config').first().json.approvedByOperator === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "upload",
+      "name": "Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        690,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/uploads?format=csv' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/csv",
+        "body": "={{ $('Config').first().json.feedCsv }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "quote",
+      "name": "Quote",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/quotes' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {upload_id: $('Upload').first().json.id, profile_id: $('Config').first().json.profileId} }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "compatible-source",
+      "name": "Compatible source",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1150,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status === 'quoted' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "start-job",
+      "name": "Start job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1380,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {quote_id: $('Quote').first().json.id, idempotency_key: $('Config').first().json.idempotencyKey} }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "wait",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1610,
+        200
+      ],
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "job-status",
+      "name": "Job status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "terminal-job",
+      "name": "Terminal job",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2070,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ ['completed','failed'].includes($json.status) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "polling-budget",
+      "name": "Polling budget",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2300,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $runIndex < 60 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "completed-evaluation",
+      "name": "Completed evaluation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2530,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status === 'completed' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "validation-report",
+      "name": "Validation report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2760,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id + '/report' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "accepted-output",
+      "name": "Accepted output",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2990,
+        200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.verdict === 'passed' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "download-jsonl",
+      "name": "Download JSONL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3220,
+        200
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id + '/output' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "normalizedFeed"
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "notify-reviewer",
+      "name": "Notify reviewer",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3450,
+        200
+      ],
+      "parameters": {
+        "fromEmail": "YOUR_VERIFIED_FROM_EMAIL",
+        "toEmail": "={{ $('Config').first().json.reviewEmail }}",
+        "subject": "Supplier feed needs mapping review",
+        "emailFormat": "text",
+        "text": "Source structure changed. Review the Quote node and approve a new versioned profile before importing."
+      },
+      "credentials": {
+        "smtp": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "Reviewer notification SMTP"
+        }
+      }
+    },
+    {
+      "id": "instructions",
+      "name": "Instructions",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3680,
+        200
+      ],
+      "parameters": {
+        "width": 550,
+        "height": 300,
+        "content": "## Configure before running\nUse an existing funded API key in HTTP Header Auth (header X-API-Key). Inspect the mapping, target contract, currency and locale, then set approvedByOperator to true. Use a unique idempotency key for each evaluation. Full rejection reports consume one credit; failed jobs do not. Polling stops after 60 retries.\n\nFor recurring/corrected feeds, set an existing approved profile ID. For correction replay, set the rejected job ID and corrected CSV. Drift notification needs your SMTP credential and reviewer address. No storefront updates occur in this workflow."
+      }
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Operator approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operator approved": {
+      "main": [
+        [
+          {
+            "node": "Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload": {
+      "main": [
+        [
+          {
+            "node": "Quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quote": {
+      "main": [
+        [
+          {
+            "node": "Compatible source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compatible source": {
+      "main": [
+        [
+          {
+            "node": "Start job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify reviewer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start job": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Job status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job status": {
+      "main": [
+        [
+          {
+            "node": "Terminal job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminal job": {
+      "main": [
+        [
+          {
+            "node": "Completed evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Polling budget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Polling budget": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completed evaluation": {
+      "main": [
+        [
+          {
+            "node": "Validation report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation report": {
+      "main": [
+        [
+          {
+            "node": "Accepted output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted output": {
+      "main": [
+        [
+          {
+            "node": "Download JSONL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

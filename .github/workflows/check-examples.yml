@@ -1,0 +1,25 @@
+name: Check published examples
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m compileall -q client.py
+      - run: |
+          python - <<'PYTHON'
+          import json
+          from pathlib import Path
+          for path in Path('.').glob('*.json'):
+              value=json.loads(path.read_text())
+              if path.name.endswith('.n8n.json'):
+                  assert value['active'] is False
+                  assert all(n['type'].startswith('n8n-nodes-base.') for n in value['nodes'])
+          row=json.loads(Path('normalized-example.jsonl').read_text().splitlines()[0])
+          assert row['sku']=='000123' and row['price']=='19.90'
+          PYTHON

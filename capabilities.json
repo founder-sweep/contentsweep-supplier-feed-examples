@@ -1,0 +1,40 @@
+{
+  "name": "ContentSweep supplier feeds",
+  "version": "feeds-1.0",
+  "description": "Normalize flat supplier catalogs using approved mappings and complete-file validation.",
+  "formats": [
+    "csv",
+    "jsonl"
+  ],
+  "limits": {
+    "bytes": 10485760,
+    "rows": 50000,
+    "fields": 100
+  },
+  "outcomes": [
+    "passed",
+    "rejected",
+    "review_required",
+    "failed"
+  ],
+  "approval": "explicit mapping approval; changed source structures require new approval",
+  "auth": "existing funded organization API key",
+  "mcp": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+  "openapi": "https://mcp.contentsweep.ai/openapi.json",
+  "privacy": "https://mcp.contentsweep.ai/imports/privacy",
+  "retention": {
+    "uploads_hours": 24,
+    "results_days": 7,
+    "receipts_days": 30
+  },
+  "semantic_guarantee": "approved mappings and explicitly configured constraints only",
+  "billing": {
+    "unit": "completed full-file evaluation including rejection",
+    "monthly_usd": 99,
+    "monthly_evaluations": 100,
+    "pack_usd": 20,
+    "pack_evaluations": 10,
+    "automatic_overages": false,
+    "machine_payments": "not enabled"
+  }
+}

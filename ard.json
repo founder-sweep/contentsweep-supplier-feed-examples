@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:contentsweep.ai:server:supplier-feeds",
+      "displayName": "ContentSweep supplier feeds",
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "type": "application/mcp-server-card+json",
+      "version": "1.0.0",
+      "description": "Approved supplier-feed mapping and full-file validation.",
+      "url": "https://mcp.contentsweep.ai/imports/server-card.json",
+      "capabilities": [
+        "supplier_catalog_mapping",
+        "complete_file_validation",
+        "schema_drift"
+      ],
+      "representativeQueries": [
+        "Validate a recurring supplier CSV against an approved catalog schema",
+        "Preserve product identifiers and decimal prices during imports"
+      ]
+    }
+  ]
+}

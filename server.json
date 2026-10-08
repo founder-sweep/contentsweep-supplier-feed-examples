@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.contentsweep/supplier-feeds",
+  "title": "ContentSweep Supplier Feeds",
+  "description": "Map and validate recurring flat supplier catalogs with approved profiles and drift checks.",
+  "version": "1.0.0",
+  "websiteUrl": "https://mcp.contentsweep.ai/imports",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+      "headers": [
+        {
+          "name": "X-API-Key",
+          "description": "Existing organization API key",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

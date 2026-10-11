@@ -1,0 +1,30 @@
+{
+  "name": "ai.contentsweep/supplier-feeds",
+  "version": "1.0.0",
+  "record_url": "https://registry.modelcontextprotocol.io/v0.1/servers/ai.contentsweep%2Fsupplier-feeds/versions/1.0.0",
+  "latest_url": "https://registry.modelcontextprotocol.io/v0.1/servers/ai.contentsweep%2Fsupplier-feeds/versions/latest",
+  "status": "active",
+  "published_at": "2026-10-11T01:39:45.307294Z",
+  "remote": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+  "auth": "existing organization API key through X-API-Key",
+  "authenticated_hosted_smoke": {
+    "tools": 12,
+    "rows": 2,
+    "isolation": "passed"
+  },
+  "publisher_version": "v1.8.1",
+  "dns_proof": "apex contentsweep.ai TXT; preexisting root records preserved",
+  "checked_at": "2026-10-11T01:43:12Z",
+  "release_tag": "feeds-v1.0.0",
+  "release_commit": "54599aa91d7fc61992db9fd2d06483036da08e9a",
+  "release_action": "https://github.com/founder-sweep/contentsweep-supplier-feed-examples/actions/runs/38102951177",
+  "release_action_result": "success",
+  "registry_search": {
+    "query": "contentsweep",
+    "exact_name_found": true
+  },
+  "listing_monitor": {
+    "exact_record": "passed",
+    "search_indexing": "checked separately"
+  }
+}

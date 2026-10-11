@@ -1,0 +1,53 @@
+name: Publish verified MCP release
+on:
+  push:
+    tags: ['feeds-v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: contentsweep-mcp-registry
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: contentsweep-distribution
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Check release examples and descriptor version
+        run: |
+          python -m compileall -q client.py publish-registry.py
+          python - <<'PYTHON'
+          import json, os
+          from pathlib import Path
+          descriptor = json.loads(Path('server.json').read_text())
+          ref = os.environ['GITHUB_REF']
+          if ref.startswith('refs/tags/feeds-v'):
+              assert descriptor['version'] == ref.removeprefix('refs/tags/feeds-v'), 'Tag must match the reviewed descriptor'
+          for path in Path('.').glob('*.n8n.json'):
+              workflow = json.loads(path.read_text())
+              assert workflow['active'] is False
+              config = next(n for n in workflow['nodes'] if n['name'] == 'Config')
+              assert json.loads(config['parameters']['jsonOutput'])['approvedByOperator'] is False
+              for node in workflow['nodes']:
+                  assert node['type'].startswith('n8n-nodes-base.')
+                  for credential in node.get('credentials', {}).values():
+                      assert credential['id'] == 'CONFIGURE_IN_N8N'
+          row = json.loads(Path('normalized-example.jsonl').read_text().splitlines()[0])
+          assert row['sku'] == '000123' and row['price'] == '19.90'
+          PYTHON
+          curl --fail --silent --show-error --max-time 25 https://mcp.contentsweep.ai/health/ready
+          curl --fail --silent --show-error --max-time 25 https://mcp.contentsweep.ai/imports/capabilities.json
+      - name: Install checksum-pinned official publisher
+        run: |
+          curl --fail --location --silent --show-error --max-time 60 https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz -o publisher.tar.gz
+          echo 'a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc  publisher.tar.gz' | sha256sum --check
+          tar xzf publisher.tar.gz mcp-publisher
+          ./mcp-publisher validate server.json
+      - name: Publish or verify the immutable version
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: python publish-registry.py

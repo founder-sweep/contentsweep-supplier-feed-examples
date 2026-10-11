@@ -1,0 +1,23 @@
+{
+  "template": "approved-import",
+  "n8n_version": "2.42.5",
+  "image_digest": "sha256:f6dc0d15bc9620baf5ba1df834ef81ae4e969f778c09300e567217be88f04a96",
+  "base_url": "https://mcp.contentsweep.ai",
+  "checked_at": "2026-10-11T01:42:12Z",
+  "result": "passed",
+  "execution_status": "success",
+  "last_node": "Download JSONL",
+  "node_count": 17,
+  "downloaded_output": [
+    {
+      "sha256": "32379aff610cb7d0a69b5ab3ff77213d5a4c97588a6d5f112336813c7bf285e3",
+      "rows": 2,
+      "identifier": "000123",
+      "price": "19.90"
+    }
+  ],
+  "fixture": "repository-owned supplier.csv",
+  "billing": "synthetic trial; no payment",
+  "credentials": "private and excluded from published assets",
+  "creator_hub_status": "not_submitted"
+}

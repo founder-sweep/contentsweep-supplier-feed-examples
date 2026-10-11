@@ -59,7 +59,8 @@ def publish(server, publisher, private_key, *, read=get_json, run=subprocess.run
     ready = read(BASE + '/health/ready')
     capabilities = read(BASE + '/imports/capabilities.json')
     deployed = read(BASE + '/imports/server.json')
-    if ready is None or capabilities is None or deployed is None or deployed.get('remotes') != remotes:
+    if (ready is None or ready.get('status') != 'ready' or ready.get('feed_mcp') != 'ready'
+            or capabilities is None or deployed is None or deployed.get('remotes') != remotes):
         raise RuntimeError('Deployed service metadata or readiness check failed')
     if capabilities.get('limits', {}).get('rows') != 50000 or capabilities.get('limits', {}).get('bytes') != 10485760:
         raise RuntimeError('Deployed bounds do not match the qualified offer')

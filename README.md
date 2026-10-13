@@ -4,7 +4,7 @@ Turn recurring supplier CSV/JSONL into an approved destination schema, validate 
 
 [Offer and synthetic demo](https://mcp.contentsweep.ai/imports) · [Integration guide](https://mcp.contentsweep.ai/imports/integrate) · [Request a pilot](https://mcp.contentsweep.ai/imports/pilot?source=github-examples)
 
-All three examples were exercised with actual n8n 2.42.5 against the local Compose API. The first-import workflow also passed against the deployed HTTPS API, including its downloaded JSONL; see n8n-hosted-verification.json. Creator Hub submission is pending account access; acceptance and a verified custom node are separate steps.
+All three examples were exercised with actual n8n 2.42.5 against the local Compose API. The first-import workflow also passed against the deployed HTTPS API, including its downloaded JSONL; see n8n-hosted-verification.json. The owner reported the first Creator Hub template submitted and in review on October 13, 2026; see n8n-submission-status.json. Approval and a public n8n listing are pending. A verified custom node is a separate step.
 
 - `approved-import.n8n.json`: supplier feed → explicit mapping approval → validated JSONL.
 - `drift-review.n8n.json`: saved profile → changed source → review notification.

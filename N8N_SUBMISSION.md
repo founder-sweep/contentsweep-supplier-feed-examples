@@ -1,6 +1,6 @@
 # First Creator Hub submission
 
-Status: ready for submission; Creator Hub account access is still required. No submission or approval is claimed. Submit this one first; new creators may have one submission under review at a time.
+Status: submitted and in review, as reported by the owner on October 13, 2026. The submission ID and public listing URL have not been provided. Approval is pending. Keep the remaining two templates unsubmitted until this one is approved.
 
 Workflow JSON: `approved-import.n8n.json` (inactive, no API key, credential placeholders only). Category suggestions, if available in the actual form: Data & Storage, Sales, or Ecommerce. Choose the closest supported category in Creator Hub rather than inventing a category.
 

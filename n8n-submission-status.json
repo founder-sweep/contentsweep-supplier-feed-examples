@@ -1,0 +1,12 @@
+{
+  "template": "approved-import",
+  "title": "Validate supplier CSVs and preserve product IDs with ContentSweep",
+  "submitted": true,
+  "status": "in_review",
+  "status_source": "owner_report",
+  "reported_on": "2026-10-13",
+  "submission_id": null,
+  "public_listing_url": null,
+  "approved": false,
+  "next_templates": "wait_for_first_approval"
+}

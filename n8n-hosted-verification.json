@@ -19,5 +19,5 @@
   "fixture": "repository-owned supplier.csv",
   "billing": "synthetic trial; no payment",
   "credentials": "private and excluded from published assets",
-  "creator_hub_status": "not_submitted"
+  "creator_hub_status_at_check": "not_submitted"
 }

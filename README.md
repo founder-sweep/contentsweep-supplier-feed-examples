@@ -1,10 +1,18 @@
 # ContentSweep supplier-feed examples
 
+<!-- agent-current-status:start -->
+## Current status — November 1, 2026
+
+Hosted engine feeds-1.0; MCP server reports 1.1.0 and the existing active Registry descriptor is 1.1.1. These version labels describe different artifacts. Five trials once per verified organization; $20/10 evaluations or $99/month for 100. Existing organization key required. Revised n8n entry 20893 was last recorded under review October 31; acceptance is pending.
+
+[Agent setup](https://mcp.contentsweep.ai/imports/integrate) · [Product skill](https://mcp.contentsweep.ai/imports/SKILL.md) · [Task-to-tool reference](https://mcp.contentsweep.ai/imports/agent-assets/TOOL_REFERENCE.md). Skills support Codex and Claude Code and grant no upload, business-meaning approval, spending or destination-write permission. Historical test notes below retain their original scope; synthetic/internal qualification is not paid adoption.
+<!-- agent-current-status:end -->
+
 Turn recurring supplier CSV/JSONL into an approved destination schema, validate the complete file, and stop for review when its source structure changes.
 
 [Offer and synthetic demo](https://mcp.contentsweep.ai/imports) · [Integration guide](https://mcp.contentsweep.ai/imports/integrate) · [Request a pilot](https://mcp.contentsweep.ai/imports/pilot?source=github-examples)
 
-All three examples were exercised with actual n8n 2.42.5 against the local Compose API. The first-import workflow also passed against the deployed HTTPS API, including its downloaded JSONL; see n8n-hosted-verification.json. The owner reported the first Creator Hub template submitted and in review on October 13, 2026; see n8n-submission-status.json. Approval and a public n8n listing are pending. A verified custom node is a separate step.
+Historical recipe evidence records n8n 2.42.5 and an HTTPS first-import proof. Revised existing entry 20893 was last recorded under review October 31, 2026; acceptance is pending. Keep that entry rather than creating another submission.
 
 - `approved-import.n8n.json`: supplier feed → explicit mapping approval → validated JSONL.
 - `drift-review.n8n.json`: saved profile → changed source → review notification.
@@ -22,7 +30,7 @@ python client.py --base-url https://mcp.contentsweep.ai
 python client.py --base-url https://mcp.contentsweep.ai --approve-mapping --approve-evaluation
 ```
 
-The first command uploads the repository-owned fixture and prints the proposal. Evaluation requires an existing provisioned account and explicit flags. A completed rejection report uses one evaluation; previews and platform failures do not. Billing activation is a separate owner step.
+The first command uploads the repository-owned fixture and prints the proposal. Evaluation requires an existing provisioned account and explicit flags. A completed rejection report uses one evaluation; previews and platform failures do not. Use the existing verified product account and live funding portal; purchases need separate authorization.
 
 The approved fixture preserves SKU 000123 as a string and price 19.90 as an exact decimal string. normalized-example.jsonl is regenerated and checked before publication. These examples demonstrate supported behavior; they establish no comparative superiority or customer ROI.
 

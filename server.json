@@ -3,8 +3,12 @@
   "name": "ai.contentsweep/supplier-feeds",
   "title": "ContentSweep Supplier Feeds",
   "description": "Map and validate recurring flat supplier catalogs with approved profiles and drift checks.",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "websiteUrl": "https://mcp.contentsweep.ai/imports",
+  "repository": {
+    "url": "https://github.com/founder-sweep/contentsweep-supplier-feed-examples",
+    "source": "github"
+  },
   "remotes": [
     {
       "type": "streamable-http",

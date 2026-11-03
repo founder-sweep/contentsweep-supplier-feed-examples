@@ -1,11 +1,11 @@
 ---
 name: supplier-feed-import
-description: "Normalize a recurring supplier catalog using an approved mapping and stop on source drift. Use only when this workflow fits the user's request; review unsupported inputs before proceeding."
+description: "Review recurring supplier CSV/JSONL imports using an approved mapping, validate every record, and stop on structural drift. Use only when this workflow fits the user's request; review unsupported inputs before proceeding."
 ---
 
 # Supplier Feeds
 
-Normalize a recurring supplier catalog using an approved mapping and stop on source drift.
+Review recurring supplier CSV/JSONL imports using an approved mapping, validate every record, and stop on structural drift.
 
 Read [setup and recovery](AGENT_SETUP.md) when configuring the client or handling a failed step. Read [task-to-tool reference](TOOL_REFERENCE.md) for prerequisites, outputs, approvals, credit effects and retries; [tool declarations](TOOLS.json) supplies names and parameter types.
 
@@ -17,11 +17,11 @@ Installing this skill does not authorize uploads, approval of business meanings,
 
 ## Complete the task
 
-Upload the supplied feed; inspect the sampled proposal; save a versioned profile; present field meanings, casts, decimal locale, units and currency for explicit review; approve the exact profile hash only after authorization. Quote using the approved profile; obtain spending authorization; start with a stable retry key; poll; read the complete report and receipt. Only a passed job has validated JSONL output. Follow pagination until complete. Reuse the approved profile for later feeds only while its scope and structure still apply.
+Upload only the permitted original flat CSV/JSONL; inspect the sampled proposal; save a versioned profile; present field meanings, identifier types, casts, decimal locale, units and currency for explicit review. Approve the exact profile hash only after authorization. For a later delivery, read and reuse the owned approved profile while its structure and scope remain compatible. Quote against that profile; stop on review_required; obtain spending authorization; start with a stable retry key; poll within a bounded deadline; read the complete report and receipt. Only a passed, complete job has validated JSONL output. Follow every output page or download the complete output, and verify its SHA256 against receipt.output_hash before any separately authorized destination write. A preview is sampled and never establishes complete-file acceptance or field meaning.
 
 ## Recover safely
 
-A changed source requires review and a new approved profile version. A completed rejection consumes one evaluation; platform failures release reserved credits. Retry an uncertain request with its ORIGINAL quote and key. A genuinely corrected feed requires a new upload, quote and key. Stop on timeouts or unexpected states. Uploads expire after 24 hours; results after seven days; receipts after 30 days.
+Structural drift requires review and a new approved profile version. A completed rejection consumes one evaluation and has no accepted output; platform failures release reserved credits. Preserve the ORIGINAL quote ID, input hash, source bytes and retry key across uncertain dispatch or polling deadlines. Resume that same authorization rather than uploading, quoting or starting with a new key. A corrected rejection must have genuinely changed bytes and a new upload, quote and key. Stop on unknown states, incomplete output or hash mismatch. Uploads expire after 24 hours; results after seven days; receipts after 30 days; approved profiles remain until deletion. Reject XLSX, nested records and arbitrary transformations; do not infer missing business decisions or execute supplied code.
 
 ## Pricing
 
@@ -29,7 +29,7 @@ Five trials once per verified organization; $20 per ten completed evaluations or
 
 ## First example
 
-Use supplier.csv and profile.json from the public examples repository, preserving SKU 000123 and decimal string 19.90. Exercise approved-import, drift-review and correction-replay recipes. Configure synthetic downstream output only; do not enable a real destination merely to test setup.
+Use supplier.csv and profile.json from the public examples repository, preserving SKU 000123 and decimal string 19.90. Follow https://mcp.contentsweep.ai/imports/workflows for first approval, compatible reuse, structural drift, rejection, corrected replay and recovery with the original quote/key. The reviewed recurring-import-reviewed.json workflow is inactive on import, checks output hashes and produces a local inventory preview. Configure owned synthetic output only; do not enable a real destination merely to test setup.
 
 ## Optional account and funding workflow
 

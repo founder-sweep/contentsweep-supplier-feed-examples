@@ -1,5 +1,21 @@
 # First Creator Hub submission
 
+## Current recorded state
+
+Existing entry **20893** was resubmitted with the exact reviewed recurring-import
+workflow and read back **UNDER REVIEW** on October 31, 2026. Acceptance remains
+unverified. Use the [current recurring-import guide](RECURRING_IMPORT_GUIDE.md)
+and [reviewed workflow](recurring-import-reviewed.n8n.json); preserve that entry
+and recheck the provider before another submission. The original description and
+procedure below are retained as historical October 13 material; their manual
+pilot and billing-disabled wording is superseded by the live offer.
+
+Chrome readback on November 2 still shows the existing template **UNDER REVIEW**,
+with the displayed title “Validate and normalize product feeds with ContentSweep.”
+No edit, duplicate submission or further template submission was made.
+
+## Historical first submission
+
 Status: submitted and in review, as reported by the owner on October 13, 2026. The submission ID and public listing URL have not been provided. Approval is pending. Keep the remaining two templates unsubmitted until this one is approved.
 
 Workflow JSON: `approved-import.n8n.json` (inactive, no API key, credential placeholders only). Category suggestions, if available in the actual form: Data & Storage, Sales, or Ecommerce. Choose the closest supported category in Creator Hub rather than inventing a category.

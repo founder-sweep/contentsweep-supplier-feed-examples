@@ -47,3 +47,16 @@ The Publish verified MCP release action runs on feeds-v* tags and manual dispatc
 For the first Creator Hub template, use [the submission packet](N8N_SUBMISSION.md) and approved-import.n8n.json. Submit later templates after the first is approved, following current new-creator guidance.
 
 Example assets are published under Apache-2.0. The hosted service is operated separately. No customer files, contacts, keys, or private marketing records are included.
+
+## Recurring imports and recovery
+
+Follow the [worked example](https://mcp.contentsweep.ai/imports/workflows) or the
+[repository walkthrough](RECURRING_IMPORT_GUIDE.md) for approved-profile reuse,
+structural drift, rejection, genuinely corrected replay and uncertain-request
+recovery. Download [the exact reviewed workflow](recurring-import-reviewed.n8n.json).
+It checks the complete output hash and presents a local inventory preview without
+a storefront write or external email. Five trials; $20/10 evaluations or optional
+$99/month/100, with no automatic overages. Completed rejections use one evaluation.
+
+These are owned synthetic examples. Existing n8n entry 20893 was resubmitted on October 31 and read back
+UNDER REVIEW in Chrome on November 2, 2026; no acceptance or customer adoption is implied.

@@ -1,12 +1,32 @@
 {
-  "template": "approved-import",
-  "title": "Validate supplier CSVs and preserve product IDs with ContentSweep",
+  "template": "recurring-import-reviewed",
+  "title": "Review recurring supplier imports and replay corrections with ContentSweep",
+  "submission_id": 20893,
   "submitted": true,
-  "status": "in_review",
-  "status_source": "owner_report",
-  "reported_on": "2026-10-13",
-  "submission_id": null,
-  "public_listing_url": null,
+  "status": "under_review",
+  "status_source": "verified owner Creator Hub resubmission and readback receipt",
+  "reported_on": "2026-10-31",
   "approved": false,
-  "next_templates": "wait_for_first_approval"
+  "workflow_sha256": "d620f1ebb5797842c6b73e9ecd69ad77296a2f5fc11d18ea79be5f1b9d230ef7",
+  "public_listing_url": null,
+  "next_templates": "wait_for_first_approval",
+  "history": [
+    {
+      "template": "approved-import",
+      "title": "Validate supplier CSVs and preserve product IDs with ContentSweep",
+      "submitted": true,
+      "status": "in_review",
+      "status_source": "owner_report",
+      "reported_on": "2026-10-13",
+      "submission_id": null,
+      "public_listing_url": null,
+      "approved": false,
+      "next_templates": "wait_for_first_approval"
+    }
+  ],
+  "provider_checked_at": "2026-11-03T03:58:39.532552+00:00",
+  "provider_current_state": "UNDER REVIEW",
+  "provider_current_title": "Validate and normalize product feeds with ContentSweep",
+  "provider_readback": "Signed-in existing Creator Portal dashboard in Chrome; no edit or submission",
+  "provider_evidence": "evidence/supplier-agent-marketing/n8n-under-review-2026-11-02.png"
 }

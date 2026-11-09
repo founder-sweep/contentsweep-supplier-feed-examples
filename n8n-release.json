@@ -1,0 +1,21 @@
+{
+  "workflow_sha256": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+  "review_packet_sha256": "3c79c153e5bd108924bb0a399b4707a654d7e32332ee3111663cf8ddf5a181b0",
+  "approved_client_date": "2026-11-08",
+  "n8n_version": "2.42.5",
+  "imported_scenarios_passed": 19,
+  "files": {
+    "N8N_REVIEW.md": "f44bbfc4c13f73311e35f0c5ea184fd83709ccf44e9fad655946c61b94f8132f",
+    "N8N_SUBMISSION.md": "45861ba3cbf736455e9436a61303876307cddd0bd4fd76df89e1eed0c3d6c057",
+    "README.md": "60acbdc32132bbe9e3ca74b12b6f0afb87df6e19f38f8cdc1a68e396517ea1d5",
+    "RECURRING_IMPORT_GUIDE.md": "0138ca89aa1f6c6eb9c5636b7eccceaee3df14f2fa32c6dc9ca90a8340c10ceb",
+    "n8n-description.txt": "747fdf1e7eeda647ccd0667802a87f55ae010121786f1a8c62a2838ed7289cb5",
+    "profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
+    "recurring-import-candidate.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+    "recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+    "review/canvas.jpg": "46dee6f8244723b2a1096041df9b99ae67df39ea6cb7226a2c2124850cd4ad4e",
+    "review/configuration.jpg": "4c7cf05305c23e164116752a11f0e32873849469843a140967e61cf55ee7705a",
+    "review/overview.jpg": "d3ad13c7c67285a3b53810f83f5d6743a7acb60bc8483017a502bd75001c5d20",
+    "review/recovery-and-quote.jpg": "78068ae13237277f21072863e2b613caf8c5da260530b779504ab0d2236f1fba"
+  }
+}

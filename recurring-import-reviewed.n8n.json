@@ -7,8 +7,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        100,
+        160
       ],
       "parameters": {}
     },
@@ -18,12 +18,12 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        300,
-        0
+        420,
+        160
       ],
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "{\"baseUrl\": \"https://mcp.contentsweep.ai\", \"feedCsv\": \"product_code,product_name,unit_price,currency,available\\n000123,Desk lamp,\\\"19,90\\\",EUR,12\\n000124,Reading light,\\\"24,50\\\",EUR,8\\n\", \"targetSchema\": {\"type\": \"object\", \"additionalProperties\": false, \"properties\": {\"sku\": {\"type\": \"string\"}, \"title\": {\"type\": \"string\"}, \"price\": {\"type\": \"string\", \"format\": \"decimal\"}, \"currency\": {\"type\": \"string\", \"enum\": [\"EUR\"]}, \"stock\": {\"type\": \"integer\", \"minimum\": 0}}, \"required\": [\"sku\", \"title\", \"price\", \"currency\", \"stock\"]}, \"mapping\": [{\"source\": \"product_code\", \"target\": \"sku\", \"operation\": \"copy\"}, {\"source\": \"product_name\", \"target\": \"title\", \"operation\": \"copy\"}, {\"source\": \"unit_price\", \"target\": \"price\", \"operation\": \"decimal\", \"decimal_separator\": \",\"}, {\"source\": \"currency\", \"target\": \"currency\", \"operation\": \"copy\"}, {\"source\": \"available\", \"target\": \"stock\", \"operation\": \"integer\"}], \"contract\": {\"rules\": [{\"id\": \"unique-sku\", \"type\": \"unique\", \"column\": \"sku\"}]}, \"approvedByOperator\": false, \"profileId\": \"YOUR_APPROVED_PROFILE_ID\", \"originalJobId\": \"YOUR_REJECTED_JOB_ID\", \"idempotencyKey\": \"YOUR_UNIQUE_IMPORT_KEY\", \"correctionReplay\": false, \"resumeQuoteId\": \"\", \"resumeInputHash\": \"\", \"pollLimit\": 25}"
+        "jsonOutput": "{\"baseUrl\": \"https://mcp.contentsweep.ai\", \"feedCsv\": \"product_code,product_name,unit_price,currency,available\\n000123,Desk lamp,\\\"19,90\\\",EUR,12\\n000124,Reading light,\\\"24,50\\\",EUR,8\\n\", \"approvedByOperator\": false, \"profileId\": \"YOUR_APPROVED_PROFILE_ID\", \"originalJobId\": \"\", \"idempotencyKey\": \"YOUR_UNIQUE_IMPORT_KEY\", \"correctionReplay\": false, \"resumeQuoteId\": \"\", \"resumeInputHash\": \"\", \"pollLimit\": 25}"
       }
     },
     {
@@ -32,8 +32,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        600,
-        0
+        740,
+        160
       ],
       "parameters": {
         "conditions": {
@@ -42,7 +42,7 @@
           },
           "conditions": [
             {
-              "leftValue": "={{ $('Config').first().json.approvedByOperator === true && Number.isInteger($('Config').first().json.pollLimit) && $('Config').first().json.pollLimit >= 1 && $('Config').first().json.pollLimit <= 25 && !$('Config').first().json.profileId.startsWith('YOUR_') && !$('Config').first().json.idempotencyKey.startsWith('YOUR_') }}",
+              "leftValue": "={{ $('Config').first().json.approvedByOperator === true }}",
               "rightValue": true,
               "operator": {
                 "type": "boolean",
@@ -61,8 +61,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        900,
-        0
+        1060,
+        1000
       ],
       "parameters": {
         "method": "POST",
@@ -90,8 +90,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1200,
-        0
+        1740,
+        1200
       ],
       "parameters": {
         "method": "POST",
@@ -118,8 +118,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1500,
-        0
+        2380,
+        1200
       ],
       "parameters": {
         "conditions": {
@@ -147,8 +147,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        0,
-        220
+        2700,
+        1200
       ],
       "parameters": {
         "method": "POST",
@@ -175,8 +175,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        300,
-        220
+        3120,
+        680
       ],
       "parameters": {
         "amount": 5,
@@ -189,8 +189,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        600,
-        220
+        3440,
+        680
       ],
       "parameters": {
         "method": "GET",
@@ -214,8 +214,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        900,
-        220
+        3760,
+        680
       ],
       "parameters": {
         "conditions": {
@@ -243,8 +243,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1200,
-        220
+        3760,
+        1000
       ],
       "parameters": {
         "conditions": {
@@ -272,8 +272,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1500,
-        220
+        4080,
+        680
       ],
       "parameters": {
         "conditions": {
@@ -301,8 +301,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        0,
-        440
+        1740,
+        1760
       ],
       "parameters": {
         "method": "GET",
@@ -326,8 +326,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        300,
-        440
+        2220,
+        1760
       ],
       "parameters": {
         "conditions": {
@@ -355,8 +355,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        600,
-        440
+        3180,
+        1760
       ],
       "parameters": {
         "method": "GET",
@@ -386,8 +386,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        900,
-        440
+        100,
+        680
       ],
       "parameters": {
         "conditions": {
@@ -415,8 +415,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
-        440
+        1740,
+        680
       ],
       "parameters": {
         "jsCode": "const c=$('Config').first().json;return [{json:{id:c.resumeQuoteId,input_hash:c.resumeInputHash,retryRequested:true}}];"
@@ -428,11 +428,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1500,
-        440
+        2060,
+        680
       ],
       "parameters": {
-        "jsCode": "const c=$('Config').first().json; const hash=require('crypto').createHash('sha256').update(c.feedCsv,'utf8').digest('hex');if(c.approvedByOperator!==true||!Number.isInteger(c.pollLimit)||c.pollLimit<1||c.pollLimit>25||c.idempotencyKey.startsWith('YOUR_'))throw new Error('Review retry approval and configuration.');if($json.input_hash!==hash)throw new Error('Retry bytes differ from the original quote. Review a new import.');return [{json:$json}];"
+        "jsCode": "const c=$('Config').first().json; const hash=require('crypto').createHash('sha256').update(c.feedCsv,'utf8').digest('hex');if($json.input_hash!==hash)throw new Error('Retry bytes differ from the original quote. Review a new import.');return [{json:$json}];"
       }
     },
     {
@@ -441,8 +441,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
-        660
+        2060,
+        1200
       ],
       "parameters": {
         "jsCode": "return $input.all();"
@@ -454,8 +454,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        300,
-        660
+        100,
+        1000
       ],
       "parameters": {
         "conditions": {
@@ -483,8 +483,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        600,
-        660
+        420,
+        1000
       ],
       "parameters": {
         "method": "GET",
@@ -508,11 +508,24 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        900,
-        660
+        740,
+        1000
       ],
       "parameters": {
         "jsCode": "const c=$('Config').first().json; const hash=require('crypto').createHash('sha256').update(c.feedCsv,'utf8').digest('hex');if($json.status!=='completed'||$json.verdict!=='rejected'||!$json.receipt||$json.receipt.input_hash===hash)throw new Error('Correction requires a completed rejection and genuinely changed bytes.');return [{json:{correctionReviewed:true}}];"
+      }
+    },
+    {
+      "name": "Validate configuration",
+      "id": "validate-configuration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        160
+      ],
+      "parameters": {
+        "jsCode": "const c=$('Config').first().json;\nconst configured=v=>typeof v==='string' && v.trim()!=='' && !v.startsWith('YOUR_');\nif(!configured(c.profileId)||!configured(c.idempotencyKey)||typeof c.feedCsv!=='string'||c.feedCsv.trim()==='')throw new Error('Configure the approved profile, source CSV and a fresh stable retry key.');\nif(!Number.isInteger(c.pollLimit)||c.pollLimit<1||c.pollLimit>25)throw new Error('pollLimit must be an integer from 1 to 25.');\nif(typeof c.correctionReplay!=='boolean'||typeof c.resumeQuoteId!=='string'||typeof c.resumeInputHash!=='string')throw new Error('Use boolean correctionReplay and string recovery fields.');\nif(c.correctionReplay&&c.resumeQuoteId!=='')throw new Error('Choose correction replay or recovery, not both.');\nif(c.correctionReplay&&!configured(c.originalJobId))throw new Error('Correction replay needs the completed rejected job ID.');\nif(c.resumeQuoteId!==''&&!/^[a-f0-9]{64}$/.test(c.resumeInputHash))throw new Error('Recovery needs the original input SHA256.');\nreturn $input.all();"
       }
     },
     {
@@ -521,8 +534,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
-        660
+        1060,
+        1480
       ],
       "parameters": {
         "jsCode": "throw new Error('Stopped before downstream preview. Review approval, source drift, funding, rejection, failure or polling deadline. Preserve the original quote and key on uncertain retries.');"
@@ -534,8 +547,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1500,
-        660
+        2700,
+        1760
       ],
       "parameters": {
         "method": "GET",
@@ -559,56 +572,139 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
-        880
+        3660,
+        1760
       ],
       "parameters": {
-        "jsCode": "const bytes=await this.helpers.getBinaryDataBuffer(0,'normalizedFeed');\nconst receipt=$('Accepted receipt').first().json.receipt;\nconst hash=require('crypto').createHash('sha256').update(bytes).digest('hex');\nif(!receipt||receipt.verdict!=='passed'||hash!==receipt.output_hash)throw new Error('Output fingerprint verification failed.');\nconst rows=bytes.toString('utf8').trim().split('\\n').filter(Boolean).map(line=>JSON.parse(line));\nreturn [{json:{mode:'Preview only; no external inventory write',verifiedArtifactHash:hash,rowCount:rows.length,inventory:rows.map(row=>({sku:row.sku,price:row.price,currency:row.currency}))}}];"
+        "jsCode": "const bytes=await this.helpers.getBinaryDataBuffer(0,'normalizedFeed');\nconst receipt=$('Accepted receipt').first().json.receipt;\nconst hash=require('crypto').createHash('sha256').update(bytes).digest('hex');\nif(!receipt||receipt.verdict!=='passed'||hash!==receipt.output_hash)throw new Error('Output fingerprint verification failed.');\nconst rows=bytes.toString('utf8').trim().split('\\n').filter(Boolean).map(line=>JSON.parse(line));\nreturn [{json:{mode:'Preview only; no external inventory write',verifiedArtifactHash:hash,rowCount:rows.length,inventory:rows}}];"
       }
     },
     {
-      "name": "Setup",
-      "id": "notes-0",
+      "name": "Overview",
+      "id": "note-overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        0
+      ],
+      "parameters": {
+        "content": "### How it works\nCatalog operators can check each supplier CSV against an approved ContentSweep profile. Run manually to upload, quote, evaluate and inspect validated JSONL. Changed columns or rejected rows stop delivery. Accepted output is checked against the receipt SHA256 before all inventory fields appear locally. This workflow ends at the preview; it does not update a shop.\n\n### Setup\nTested on self-hosted n8n 2.42.5 with built-in nodes. Enable NODE_FUNCTION_ALLOW_BUILTIN=crypto on n8n and its task runner. Verify a Supplier Feeds organization at https://mcp.contentsweep.ai/account/sign-in?product=supplier-feeds. In the application, approve the CSV field meanings, identifier types, decimal locale, currency and contract. Fixture mapping: product_code\u2192sku (text), product_name\u2192title (text), unit_price\u2192price (comma-decimal string), currency\u2192currency (EUR), available\u2192stock (nonnegative integer); require unique sku.\n\nCreate HTTP Header Auth named ContentSweep X-API-Key: header X-API-Key, value your private organization key. Select it on all eight HTTP Request nodes. In Config, keep baseUrl, the included feedCsv and pollLimit=25; set profileId and a fresh idempotencyKey. Leave correctionReplay=false and recovery fields empty. Review the evaluation cost, set approvedByOperator=true, then execute. Expect two preview rows, SKU \"000123\" and price \"19.90\" as strings. Also test an empty feed and changed header; neither may produce a preview. Five trials are available per verified organization; funded access is needed afterward. Completed rejections consume one evaluation.\n\n### Customization\nReplace feedCsv for later deliveries. For corrections, enable correctionReplay, set originalJobId and change the bytes/key. For recovery, set resumeQuoteId/resumeInputHash and retain the original bytes/key. pollLimit accepts 1\u201325 retries. Changed structure needs a newly approved profile. Guide: https://mcp.contentsweep.ai/imports/workflows",
+        "width": 920,
+        "height": 620,
+        "color": 1
+      }
+    },
+    {
+      "name": "1 Configure and authorize",
+      "id": "note-1-configure-and-authorize",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         0,
-        -440
+        0
       ],
       "parameters": {
-        "content": "## Recurring import setup\nRun the existing approved-import recipe first. Review field meanings, IDs, locale, currency, contract and exact profile hash. Put its profileId here; this workflow never approves mappings. Configure your organization X-API-Key, source bytes and a fresh stable key. Defaults are inactive and unapproved. Five trials; $20/10 evaluations or optional $99/month/100. Completed rejections consume one evaluation. No automatic top-up.",
-        "width": 600,
-        "height": 380
+        "content": "## 1 \u00b7 Configure and authorize\nSet Config, select the header credential, and approve one evaluation. Invalid configuration stops before any HTTP request.",
+        "width": 1400,
+        "height": 400,
+        "color": 7
       }
     },
     {
-      "name": "Review and corrections",
-      "id": "notes-1",
+      "name": "2 Choose the delivery path",
+      "id": "note-2-choose-the-delivery-path",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        650,
-        -440
+        0,
+        520
       ],
       "parameters": {
-        "content": "## Two safe paths\nRecurring: reuse the approved profile; structural drift stops before a job. Corrected replay: set correctionReplay=true and originalJobId to the completed rejection. Correct bytes require a new key/quote; identical bytes are refused. Source/schema changes need a newly reviewed profile, never an automatic remap. Blocks, failures, HTTP errors and warnings never become inventory writes.",
-        "width": 600,
-        "height": 380
+        "content": "## 2 \u00b7 Choose the delivery path\nUse a compatible delivery or a genuinely corrected rejection. Recovery takes the upper branch and reuses the original authorization.",
+        "width": 1400,
+        "height": 720,
+        "color": 7
       }
     },
     {
-      "name": "Recovery",
-      "id": "notes-2",
+      "name": "3 Recover the original quote",
+      "id": "note-3-recover-the-original-quote",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1300,
-        -440
+        1640,
+        520
       ],
       "parameters": {
-        "content": "## Bounded recovery and handoff\nPolling is bounded by the configured retry budget (25 retry cycles by default, plus the first status read). For uncertain dispatch or timeout, retain the ORIGINAL Quote node id, input_hash and retry key. Set resumeQuoteId/resumeInputHash from that saved response and preserve exact bytes/key. Recovery does not upload or quote again: the server verifies the original authorization and returns the same job. Expired quotes or changed bytes need review. HTTP errors stop execution. Enable the runner crypto built-in. Accepted JSONL is checked against the receipt SHA256, then shown as a local inventory preview. The supplied data is owned synthetic data; there is no storefront write or external email.",
-        "width": 600,
-        "height": 380
+        "content": "## 3 \u00b7 Recover the original quote\nVerify the original bytes before reusing a quote. Recovery never uploads or quotes again; it continues at Use quote below.",
+        "width": 820,
+        "height": 400,
+        "color": 7
+      }
+    },
+    {
+      "name": "4 Quote and start",
+      "id": "note-4-quote-and-start",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        1040
+      ],
+      "parameters": {
+        "content": "## 4 \u00b7 Quote and start\nFresh and recovered quotes meet at Use quote. Structure and credit checks stop drift or insufficient funding before a job starts.",
+        "width": 1320,
+        "height": 400,
+        "color": 7
+      }
+    },
+    {
+      "name": "5 Wait within a budget",
+      "id": "note-5-wait-within-a-budget",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        520
+      ],
+      "parameters": {
+        "content": "## 5 \u00b7 Wait within a budget\nPoll until completion or failure. A deadline stops for review; retain the original quote and key because the job may still finish.",
+        "width": 1460,
+        "height": 720,
+        "color": 7
+      }
+    },
+    {
+      "name": "6 Verify and preview",
+      "id": "note-6-verify-and-preview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        1600
+      ],
+      "parameters": {
+        "content": "## 6 \u00b7 Verify and preview\nA passing report permits the download. The receipt must match its exact bytes before the complete inventory preview appears. No downstream system is updated.",
+        "width": 2840,
+        "height": 420,
+        "color": 7
+      }
+    },
+    {
+      "name": "Stop for review",
+      "id": "note-stop-for-review",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        920,
+        1340
+      ],
+      "parameters": {
+        "content": "## Review required\nNo preview was delivered. Inspect the failed branch. Preserve the original quote and key before retrying an uncertain job.",
+        "width": 500,
+        "height": 340,
+        "color": 3
       }
     }
   ],
@@ -628,7 +724,7 @@
       "main": [
         [
           {
-            "node": "Resume requested",
+            "node": "Operator approved",
             "type": "main",
             "index": 0
           }
@@ -639,7 +735,7 @@
       "main": [
         [
           {
-            "node": "Upload",
+            "node": "Validate configuration",
             "type": "main",
             "index": 0
           }
@@ -860,7 +956,7 @@
         ],
         [
           {
-            "node": "Operator approved",
+            "node": "Upload",
             "type": "main",
             "index": 0
           }
@@ -882,7 +978,18 @@
       "main": [
         [
           {
-            "node": "Operator approved",
+            "node": "Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate configuration": {
+      "main": [
+        [
+          {
+            "node": "Resume requested",
             "type": "main",
             "index": 0
           }

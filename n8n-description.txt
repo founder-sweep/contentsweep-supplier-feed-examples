@@ -1,0 +1,30 @@
+Review recurring supplier CSV files against a previously approved ContentSweep profile. Built for catalog operators and automation builders who need to preserve product IDs and decimal strings, stop changed source structures, and recover an uncertain import without starting it twice.
+
+### How it works
+
+The manual workflow validates its configuration, uploads the CSV, checks a quote against the saved profile and available evaluation balance, then starts a bounded evaluation. It polls for completion, checks the report, downloads accepted JSONL and verifies its SHA256 against the receipt before displaying every inventory field locally.
+
+A corrected rejection requires changed source bytes and a new quote/key. Recovery reuses the original quote, input hash, bytes and key. Neither path approves a mapping or updates a storefront.
+
+### Requirements
+
+Tested on self-hosted n8n 2.42.5 with built-in nodes only. Allow the built-in crypto module with NODE_FUNCTION_ALLOW_BUILTIN=crypto in n8n and its task runner. Cloud compatibility has not been qualified.
+
+ContentSweep is an external service. You need a verified Supplier Feeds organization, its API key, and an approved profile matching the CSV. Five trial evaluations are available once per verified organization. Afterward, separately funded access is required: $20 for ten evaluations or optional $99/month for 100. Completed rejections consume one evaluation. Exact retries and platform failures consume no additional evaluation; there are no automatic overages.
+
+### Setup and test
+
+1. Verify your organization at https://mcp.contentsweep.ai/account/sign-in?product=supplier-feeds. In the application, review the source fields, identifier types, decimal locale, currency and contract, then approve the exact profile. For the fixture, map product_code to text sku, product_name to text title, unit_price to comma-decimal string price, currency to EUR currency, and available to nonnegative integer stock; require unique sku.
+2. Import the workflow and leave it inactive. Create HTTP Header Auth named ContentSweep X-API-Key, with header X-API-Key and your organization key. Select it on all eight HTTP Request nodes. Keep keys out of Config and exported JSON.
+3. In Config, retain baseUrl=https://mcp.contentsweep.ai and the included synthetic feedCsv. Set profileId and a fresh idempotencyKey. Keep correctionReplay=false, originalJobId/resumeQuoteId/resumeInputHash empty, and pollLimit=25. Review one evaluation's cost, set approvedByOperator=true, and run manually.
+4. Inspect Verified inventory preview: two rows, five fields per row, SKU "000123" and price "19.90" as strings. An empty feed or changed column must stop without a preview. Replace feedCsv only with an authorized compatible CSV; review any new structure first.
+
+### Corrections, recovery and limits
+
+For a corrected rejection, enable correctionReplay, set the completed rejected originalJobId, and use changed bytes and a new key. For uncertain dispatch, keep correctionReplay=false and preserve the original bytes/key; set resumeQuoteId to the original quote ID and resumeInputHash to its input_hash. Recovery skips upload and quotation. Never invent a new key to resolve uncertainty.
+
+pollLimit permits 1–25 retries at five-second intervals after the first status read. HTTP requests time out after 30 seconds. A deadline, failed request, failed job, rejection or hash mismatch stops before delivery and needs operator review. A deadline does not prove the job failed. Expired or mismatched authorization needs review.
+
+This template accepts flat UTF-8 CSV; the service limit is 10 MiB, 50,000 records and 100 fields. Raw uploads expire after 24 hours, results after seven days and receipts after 30 days; approved profiles remain until deletion. Configure n8n execution-data retention separately. Validation checks your approved rules, not the real-world truth of the supplier's data.
+
+The included data is synthetic. Output is a local preview; configure any destination separately. Guide: https://mcp.contentsweep.ai/imports/workflows. Privacy: https://mcp.contentsweep.ai/imports/privacy.

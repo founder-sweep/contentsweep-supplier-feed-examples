@@ -3,13 +3,13 @@
   "title": "Review recurring supplier imports and replay corrections with ContentSweep",
   "submission_id": 20893,
   "submitted": true,
-  "status": "under_review",
-  "status_source": "verified owner Creator Hub resubmission and readback receipt",
-  "reported_on": "2026-10-31",
+  "status": "implement_changes",
+  "status_source": "signed-in Creator Portal dashboard and November 2 reviewer email",
+  "reported_on": "2026-11-08",
   "approved": false,
   "workflow_sha256": "d620f1ebb5797842c6b73e9ecd69ad77296a2f5fc11d18ea79be5f1b9d230ef7",
   "public_listing_url": null,
-  "next_templates": "wait_for_first_approval",
+  "next_templates": "hold_all_submissions_until_exact_candidate_runtime_visual_and_owner_review",
   "history": [
     {
       "template": "approved-import",
@@ -22,11 +22,32 @@
       "public_listing_url": null,
       "approved": false,
       "next_templates": "wait_for_first_approval"
+    },
+    {
+      "template": "recurring-import-reviewed",
+      "title": "Review recurring supplier imports and replay corrections with ContentSweep",
+      "submitted": true,
+      "status": "under_review",
+      "reported_on": "2026-10-31",
+      "workflow_sha256": "d620f1ebb5797842c6b73e9ecd69ad77296a2f5fc11d18ea79be5f1b9d230ef7"
     }
   ],
-  "provider_checked_at": "2026-11-03T03:58:39.532552+00:00",
-  "provider_current_state": "UNDER REVIEW",
+  "provider_checked_at": "2026-11-08T18:29:35.005379+00:00",
+  "provider_current_state": "IMPLEMENT CHANGES",
   "provider_current_title": "Validate and normalize product feeds with ContentSweep",
-  "provider_readback": "Signed-in existing Creator Portal dashboard in Chrome; no edit or submission",
-  "provider_evidence": "evidence/supplier-agent-marketing/n8n-under-review-2026-11-02.png"
+  "provider_readback": "Existing Chrome session; dashboard inspected without uploading or resubmitting",
+  "provider_evidence": "evidence/supplier-n8n-review-2026-11-08/provider-status.jpg",
+  "candidate": {
+    "file": "recurring-import-candidate.n8n.json",
+    "status": "approved_for_publication",
+    "owner_approval": "approved",
+    "resubmitted": false,
+    "workflow_sha256": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+    "review": "../../evidence/supplier-n8n-review-2026-11-08/review.json",
+    "runtime_scenarios_passed": 19,
+    "imported_editor_layout_inspected": true,
+    "packet_sha256": "3c79c153e5bd108924bb0a399b4707a654d7e32332ee3111663cf8ddf5a181b0",
+    "documentation_reviewed": true,
+    "three_pass_review": "completed"
+  }
 }

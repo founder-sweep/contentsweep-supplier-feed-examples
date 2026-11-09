@@ -1,80 +1,63 @@
-# Review recurring supplier imports and recover uncertain requests
+# Review recurring supplier CSV imports
 
-Use Supplier Feeds when a recurring flat supplier CSV/JSONL needs an explicitly
-reviewed mapping, complete-file validation and structural-drift stops. The
-[worked example](https://mcp.contentsweep.ai/imports/workflows) uses owned synthetic
-data; it does not establish customer adoption or time savings.
+The owner-approved November 8 workflow for existing n8n entry **20893** is [recurring-import-reviewed.n8n.json](recurring-import-reviewed.n8n.json). The candidate filename is an identical copy. Owner approval and publication of these examples do not establish acceptance into n8n’s template library.
 
-## Connect and review the first import
+This manual workflow checks each CSV against an approved ContentSweep profile, stops changed structures or rejected files, verifies accepted JSONL against its receipt, and displays every inventory field locally. It includes correction and uncertain-request recovery. It does not approve mappings or write to a destination.
 
-Verify your organization email at [Supplier Feeds](https://mcp.contentsweep.ai/imports),
-activate the product, and create an organization API key. Five trials are available
-once per verified organization. Keep the key private in the client's environment
-or an n8n HTTP Header Auth credential named `X-API-Key`.
+## Requirements
 
-Use [the first-import recipe](approved-import.n8n.json) or the customer workspace
-to review the source and destination schema. Review identifier types, field
-meanings, units, currency, decimal separator, casts and contract. Approve the exact
-profile hash. The sampled preview does not establish complete-file acceptance.
+- Tested on **self-hosted n8n 2.42.5**, using built-in nodes. No community nodes, sub-workflows, local input files or pinned execution data are needed. Cloud compatibility has not been qualified.
+- Permit the built-in `crypto` module with `NODE_FUNCTION_ALLOW_BUILTIN=crypto` in n8n and its task runner; see [n8n's module instructions](https://docs.n8n.io/hosting/configuration/configuration-examples/modules-in-code-node/).
+- An existing verified [Supplier Feeds organization](https://mcp.contentsweep.ai/account/sign-in?product=supplier-feeds), its API key and an approved profile matching your CSV. Use the application or [first-import recipe](approved-import.n8n.json) to review field meanings, identifier types, decimal locale, currency and contract, then approve the exact profile hash. The recurring workflow never performs that approval.
 
-Only after approval and spending authorization, quote and start one full-file
-evaluation. A passed job provides validated JSONL, a report and a receipt. Preserve
-the quote ID, source input hash, retry key and job ID privately.
+For the synthetic test, [profile.json](profile.json) declares the exact mapping and contract: `product_code` → text `sku`, `product_name` → text `title`, `unit_price` → comma-decimal string `price`, `currency` → EUR `currency`, and `available` → nonnegative integer `stock`; `sku` must be unique. Review these decisions in the application before approving the fixture profile. Other feeds need their own reviewed decisions.
 
-## Reuse an approved profile
+## Connect and configure
 
-Download [the reviewed recurring workflow](recurring-import-reviewed.n8n.json).
-It is inactive and uses credential placeholders. Set `profileId`, the original
-UTF-8 `feedCsv`, and a fresh stable `idempotencyKey`. After reviewing one bounded
-evaluation, set `approvedByOperator` to true. Enable n8n's built-in `crypto` module
-for SHA256 checks. This workflow never approves a mapping for you.
+Import the workflow while inactive. Create one HTTP Header Auth credential named **ContentSweep X-API-Key**, with header name `X-API-Key` and your private organization key as the value. Select it on Upload, Quote, Start job, Job status, Validation report, Download JSONL, Original rejected job and Accepted receipt. Never paste the key into Config or public JSON.
 
-| Delivery | Required behavior |
+All operator values are in **Config**:
+
+| Value | What to set |
 | --- | --- |
-| Compatible new file | Reuse the owned approved profile; obtain a new quote/key for the new input. |
-| Changed columns or structure | Stop at `review_required`; review and approve a new profile version before dispatch. |
-| Complete rejected evaluation | Keep the report; stop delivery. One evaluation is consumed, with no accepted output. |
-| Corrected rejected input | Set `correctionReplay=true` and the completed rejected `originalJobId`; supply genuinely changed bytes and a new quote/key. Identical bytes stop. |
-| Uncertain dispatch or polling deadline | Preserve the original quote ID, input hash, exact bytes and key. Set `resumeQuoteId` and `resumeInputHash`; resume without a fresh upload or quote. |
+| `baseUrl` | Keep `https://mcp.contentsweep.ai` for the hosted service. |
+| `feedCsv` | Begin with the included synthetic CSV; later replace it with an authorized compatible UTF-8 CSV. |
+| `profileId` | The owned approved profile ID for those source columns and meanings. |
+| `idempotencyKey` | A fresh stable key for a new evaluation; retain the exact original key for recovery. |
+| `approvedByOperator` | Defaults to false. Set true only after reviewing this file, profile and one evaluation's cost. |
+| `pollLimit` | Integer from 1 to 25 retry cycles after the first status read; default 25. Each retry waits five seconds. |
+| `correctionReplay` | Leave false for a new delivery or recovery; true only for a corrected rejection. |
+| `originalJobId` | Empty normally; the completed rejected job ID for correction replay. |
+| `resumeQuoteId` | Empty normally; the original quote ID for recovery. |
+| `resumeInputHash` | Empty normally; the original quote's `input_hash` for recovery. |
 
-The polling budget is one to 25 retry cycles after the first status read, with 25
-as the default. A deadline does not prove a job failed. Expired or mismatched
-authorization needs review; a new key must not be used to resolve uncertainty.
+## Test the normal path
 
-## Verify output before a destination write
+1. Follow the setup above using the included synthetic data and a matching approved profile. Review spending, set `approvedByOperator=true` and run manually.
+2. Inspect **Verified inventory preview**. Expect two rows with `sku`, `title`, `price`, `currency` and `stock`; the first SKU is string `"000123"` and price is string `"19.90"`. `verifiedArtifactHash` must equal the accepted receipt's `output_hash`. Download JSONL also exposes the `normalizedFeed` binary.
+3. With a fresh key, clear `feedCsv`: configuration must stop before HTTP requests. Restore it, change header `available` to `availability`, and use a fresh key: the quote must stop for review without a preview.
+4. Preserve the original quote ID, input hash, exact bytes, retry key and job ID privately before any retry. Review the error node and report; an execution status alone is insufficient evidence of a correct result.
 
-The recurring workflow downloads accepted JSONL, compares SHA256 with the receipt,
-and presents a local inventory preview. It makes no storefront, database or
-external email writes. The supplied example preserves SKU `000123` and price
-`19.90` as strings using an explicitly reviewed decimal rule.
+## Correct or recover
 
-For agent/MCP pagination, retrieve every page before delivery; a partial page set
-is not the complete output. Unknown states, errors, incomplete output and hash
-mismatches stop for review. Real destination writes require separate authorization.
+| Situation | Action |
+| --- | --- |
+| Compatible later delivery | Replace `feedCsv`; keep the reviewed profile; use a fresh key. |
+| Changed columns or meanings | Stop and review a new profile before evaluating. |
+| Completed rejection | Inspect the report; accepted output is unavailable. A rejection uses one evaluation. |
+| Genuinely corrected rejection | Set `correctionReplay=true`, the rejected `originalJobId`, changed bytes and a fresh key. Identical bytes stop. |
+| Uncertain dispatch or polling deadline | Leave `correctionReplay=false`. Set `resumeQuoteId` and `resumeInputHash`; retain the exact original bytes and key. This skips upload and quotation and returns the existing job without another evaluation. |
 
-## Limits, billing and retention
+Correction and recovery cannot be enabled together. A deadline does not prove failure. Do not change the key to resolve uncertainty. Expired or mismatched authorization requires review. Once a case is resolved, clear the correction/recovery fields before configuring a new delivery.
 
-- Flat UTF-8 CSV/JSONL only: 10 MiB, 50,000 records, 100 fields. No XLSX,
-  nested records, arbitrary code execution or inferred business approval.
-- $20 buys ten evaluations; the optional $99/month offer includes 100 evaluations,
-  expiring at period end. A completed rejection consumes one evaluation. No
-  automatic overages. Previews, unsupported inputs, platform failures and exact
-  retries consume no additional evaluation.
-- Uploads last 24 hours, results seven days and receipts 30 days. Approved
-  profiles remain until deletion. Configure n8n's own execution-data retention.
+HTTP requests stop on service errors and time out after 30 seconds. Failed jobs, rejected reports and exhausted polling reach review; a changed output hash fails verification before the preview returns. There is no automatic destination write or automatic recovery from these errors.
 
-The exact reviewed recurring workflow SHA256 is:
+## Cost, bounds and retention
 
-```text
-d620f1ebb5797842c6b73e9ecd69ad77296a2f5fc11d18ea79be5f1b9d230ef7
-```
+Five trial evaluations are available once per verified organization. Afterward, separately funded access costs $20 for ten evaluations or optional $99/month for 100, expiring at period end. Completed rejections consume one evaluation. Previews, unsupported inputs, platform failures and exact retries consume no additional evaluation. There are no automatic overages or replenishment by this workflow.
 
-Existing n8n submission **20893** was resubmitted and read back **UNDER REVIEW** on
-October 31, 2026. A signed-in Chrome check on November 2 still shows UNDER REVIEW.
-This does not establish acceptance. Keep the existing entry; recheck its current
-state before any later submission action.
+The template accepts flat UTF-8 CSV. Service bounds are 10 MiB, 50,000 records and 100 fields; XLSX and nested records are unsupported. Uploads expire after 24 hours, results after seven days and receipts after 30 days. Approved profiles remain until deletion. Set n8n's own execution-data retention for supplier files. Validation checks declared rules, not the real-world accuracy of the source.
 
-[Agent setup](https://mcp.contentsweep.ai/imports/integrate) ·
-[Product skill](https://mcp.contentsweep.ai/imports/SKILL.md) ·
-[Capabilities](https://mcp.contentsweep.ai/imports/capabilities.json) ·
-[Privacy](https://mcp.contentsweep.ai/imports/privacy)
+The example is owned synthetic data. The output remains local; configure any real destination separately. [Integration details](https://mcp.contentsweep.ai/imports/integrate) · [Privacy](https://mcp.contentsweep.ai/imports/privacy).
+
+For this version’s checksum, imported test results and screenshots, see [the review record](N8N_REVIEW.md). The current provider state is recorded in [n8n-submission-status.json](n8n-submission-status.json); submission and acceptance are separate events.

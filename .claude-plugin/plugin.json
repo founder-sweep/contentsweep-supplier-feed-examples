@@ -1,0 +1,11 @@
+{
+  "name": "contentsweep-supplier-feeds",
+  "version": "1.0.0",
+  "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift.",
+  "author": {
+    "name": "Content Sweep LLC",
+    "email": "founder@contentsweep.ai"
+  },
+  "homepage": "https://mcp.contentsweep.ai/imports",
+  "repository": "https://github.com/founder-sweep/contentsweep-supplier-feed-examples"
+}

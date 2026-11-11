@@ -59,3 +59,22 @@ a storefront write or external email. Five trials; $20/10 evaluations or optiona
 $99/month/100, with no automatic overages. Completed rejections use one evaluation.
 
 These are owned synthetic examples. The current workflow replaces the October version after owner approval. Its checksum and nineteen imported n8n test results are recorded in [N8N_REVIEW.md](N8N_REVIEW.md). The provider’s current state is recorded separately in [n8n-submission-status.json](n8n-submission-status.json); no acceptance or customer adoption is implied.
+
+<!-- contentsweep-skill-distribution:begin -->
+## Install the agent skill
+
+Install this skill in the intended project, then choose the coding agents you use:
+
+```sh
+npx skills add founder-sweep/contentsweep-supplier-feed-examples --skill supplier-feed-import
+```
+
+For Claude Code, add the ContentSweep marketplace and install this product:
+
+```sh
+claude plugin marketplace add founder-sweep/contentsweep-supplier-feed-examples
+claude plugin install contentsweep-supplier-feeds@contentsweep
+```
+
+The marketplace contains Supplier Feeds, Data Quality Gate, Inspector and Schema Mapper. Each plugin loads its existing product skill and companion references. Installation grants no upload, spending, business-rule approval or destination-write permission. MCP connections and runtime dependencies are configured separately using the bundled [agent setup](skills/contentsweep-supplier-feeds/AGENT_SETUP.md). Review the supported scope, privacy, free/local options and current hosted pricing before use.
+<!-- contentsweep-skill-distribution:end -->

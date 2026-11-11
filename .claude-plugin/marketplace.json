@@ -1,0 +1,37 @@
+{
+  "name": "contentsweep",
+  "owner": {
+    "name": "Content Sweep LLC",
+    "email": "founder@contentsweep.ai"
+  },
+  "metadata": {
+    "description": "Reviewed supplier imports, full-file preflight, Python release handoffs and flat schema mapping."
+  },
+  "plugins": [
+    {
+      "name": "contentsweep-supplier-feeds",
+      "source": "./"
+    },
+    {
+      "name": "contentsweep-quality",
+      "source": {
+        "source": "github",
+        "repo": "founder-sweep/data-quality-gate-examples"
+      }
+    },
+    {
+      "name": "contentsweep-inspector",
+      "source": {
+        "source": "github",
+        "repo": "founder-sweep/production-readiness-inspector"
+      }
+    },
+    {
+      "name": "contentsweep-schema-mapper",
+      "source": {
+        "source": "github",
+        "repo": "founder-sweep/contentsweep-schema-mapper"
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
     "email": "founder@contentsweep.ai"
   },
   "metadata": {
-    "description": "Reviewed supplier imports, full-file preflight, Python release handoffs and flat schema mapping."
+    "description": "Reviewed imports, full-file preflight, release inspection, schema mapping, exported Airflow diagnosis and read-only FastAPI assessment."
   },
   "plugins": [
     {
@@ -31,6 +31,20 @@
       "source": {
         "source": "github",
         "repo": "founder-sweep/contentsweep-schema-mapper"
+      }
+    },
+    {
+      "name": "contentsweep-dag-doctor",
+      "source": {
+        "source": "github",
+        "repo": "founder-sweep/contentsweep-dag-doctor"
+      }
+    },
+    {
+      "name": "contentsweep-deployment-fixer",
+      "source": {
+        "source": "github",
+        "repo": "founder-sweep/contentsweep-deployment-fixer"
       }
     }
   ]

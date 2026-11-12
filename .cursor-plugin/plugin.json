@@ -1,0 +1,33 @@
+{
+  "name": "contentsweep-supplier-feeds",
+  "version": "1.0.0",
+  "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift.",
+  "author": {
+    "name": "Content Sweep LLC",
+    "email": "founder@contentsweep.ai"
+  },
+  "homepage": "https://mcp.contentsweep.ai/imports",
+  "repository": "https://github.com/founder-sweep/contentsweep-supplier-feed-examples",
+  "license": "Apache-2.0",
+  "logo": "assets/contentsweep.svg",
+  "skills": [
+    "skills/contentsweep-supplier-feeds"
+  ],
+  "keywords": [
+    "mcp",
+    "supplier-feed-import",
+    "contentsweep"
+  ],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY": {
+        "type": "string",
+        "title": "Verified organization API key for Supplier Feeds"
+      }
+    },
+    "required": [
+      "CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY"
+    ]
+  }
+}

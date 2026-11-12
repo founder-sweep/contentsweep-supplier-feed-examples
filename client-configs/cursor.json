@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "contentsweep-supplier-feeds": {
+      "url": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+      "headers": {
+        "X-API-Key": "${env:CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY}"
+      }
+    }
+  }
+}

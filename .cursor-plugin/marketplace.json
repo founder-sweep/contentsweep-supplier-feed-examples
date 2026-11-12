@@ -1,0 +1,17 @@
+{
+  "name": "contentsweep-supplier-feeds",
+  "owner": {
+    "name": "Content Sweep LLC",
+    "email": "founder@contentsweep.ai"
+  },
+  "metadata": {
+    "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift."
+  },
+  "plugins": [
+    {
+      "name": "contentsweep-supplier-feeds",
+      "source": "./",
+      "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift."
+    }
+  ]
+}

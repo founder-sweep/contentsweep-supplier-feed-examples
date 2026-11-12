@@ -30,12 +30,12 @@
     "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/"
   },
   "owned_skill_files": {
-    "TOOLS.json": "19d9e7b63bbae021bf7f83357c571a5e82a2ef6878db61ddcb7ddaac96f24a15",
+    "TOOLS.json": "ad5b952851d1563fc72e7f95f443058853333b1730488c42dba0df45887ff305",
     "agent.css": "9d19b21c1d1894c8bc2d5a8b9e9b7fa4f0c7f159466a1c4709e5e7d4dd44788e",
     "claude.mcp.json": "24cde8fc5b93573ea1fe2850457bc3fdfd272b8a5544b57a541e7ada822a35fa",
     "codex.toml": "217a4433790397369e16c60311de0e2d306604fc3d686f7bc4e4b4ca8b96821e",
     "AGENT_SETUP.md": "7c2306ae5855b17e8c5844f44d6d6326e0dcb778e79e151dd6fc46738e5e1158",
-    "TOOL_REFERENCE.md": "afcfbc1271910756b1fda0fdd0ab361597be0461a158331cf70cfe91d0f37a34",
+    "TOOL_REFERENCE.md": "0fbb6f6b52f812b53b4aee7f08e84ca5af0e43b99b546b6c22be5976469af79f",
     "SKILL.md": "ec15fa8c6df126adb7ffc394b7bcab90423abe323ac3a2223091cdabe0c71119",
     "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
   }

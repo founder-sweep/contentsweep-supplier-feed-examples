@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "title": "Supplier Feeds",
+  "repository": "contentsweep-supplier-feed-examples",
+  "plugin": "contentsweep-supplier-feeds",
+  "skill": "supplier-feed-import",
+  "skill_path": "skills/contentsweep-supplier-feeds/SKILL.md",
+  "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift.",
+  "homepage": "https://mcp.contentsweep.ai/imports",
+  "mode": "hosted",
+  "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+  "tools": 12,
+  "setting": "CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY",
+  "pricing": "Five trials per verified organization; $20/10 evaluations or $99/month/100. Completed rejections consume an evaluation; exact retries do not.",
+  "scope": "Flat CSV/JSONL, approved mappings, 10 MiB, 50,000 records, 100 fields. No automatic destination writes.",
+  "source": "public",
+  "connection_modes": [
+    "hosted"
+  ],
+  "required_settings": [
+    "CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY"
+  ],
+  "example_references": [
+    "supplier.csv",
+    "profile.json",
+    "RECURRING_IMPORT_GUIDE.md"
+  ],
+  "artifact": {
+    "distribution": "hosted HTTPS; no local runtime artifact",
+    "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/"
+  }
+}

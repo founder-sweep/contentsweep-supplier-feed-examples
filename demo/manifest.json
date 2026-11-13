@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "product": "feeds",
+  "title": "Reuse a supplier mapping and stop structural drift",
+  "task": "Process two compatible deliveries with one explicitly reviewed profile, preserving identifiers and decimals. Stop a changed header before another evaluation.",
+  "synthetic": true,
+  "slug": "recurring-profile",
+  "url": "https://mcp.contentsweep.ai/imports/demos/recurring-profile",
+  "default_mode": "hosted",
+  "modes": [
+    "hosted"
+  ],
+  "units": 2,
+  "setting": "CONTENTSWEEP_SUPPLIER_FEEDS_API_KEY",
+  "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
+  "runtime_artifact": {
+    "distribution": "hosted HTTPS; no local runtime artifact",
+    "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/"
+  },
+  "skill": "supplier-feed-import",
+  "repository": "https://github.com/founder-sweep/contentsweep-supplier-feed-examples",
+  "pricing": "Five trials per verified organization; $20/10 evaluations or $99/month/100. Completed rejections consume an evaluation; exact retries do not.",
+  "scope": "Flat CSV/JSONL, approved mappings, 10 MiB, 50,000 records, 100 fields. No automatic destination writes.",
+  "cases": [
+    "first",
+    "later",
+    "drift"
+  ],
+  "campaign": "supplier-feeds-pilot",
+  "fixtures_sha256": {
+    "N8N_GUIDE.md": "26dc29993e97180f91d8c53d4b8c187991fe9f1499281349002ff6479035bdbf",
+    "drift.csv": "daf840c544e4612fe7722ef7bf5bd6e096d7ebf267015d5eef22317ae38f9e5c",
+    "later.csv": "bce2719dcc79cef5d2d46299d1b278995426c9ca9fe2f078052ca81bc44c0753",
+    "profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
+    "recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+    "supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5"
+  },
+  "recorded_result": "passed deterministic MCP execution",
+  "agent_run": "passed",
+  "runner_sha256": "2376130d1534c3a3122eac183c1e01ec9da050de9ac6045b9d4c790bde572aae",
+  "expected_sha256": "a4331a9c8852ecebe0e55389db84f4830d581120fd0a8d9ec93c6025f4a265c4",
+  "recorded_at": "2026-11-13T16:12:42.282753+00:00",
+  "dependencies": {
+    "python": ">=3.12",
+    "mcp": ">=2.3,<3"
+  },
+  "source_provenance": {
+    "product_base_commit": "261d302bc012c26cbacbfca5d71ec80714fa4c92",
+    "distribution_base_commit": "78b194fe6ee75d9a98602bc88cacb9f096e6d979",
+    "generator_sha256": "0b393f8d142a558d511da51de447e61711a77796cbfc37542bb191a43c2afae4"
+  },
+  "transfer_sha256": "125aede5160f1f291daa86d6f183d1faf5b470a2ed503f945e79af995d86bd2b",
+  "supplemental_sha256": {
+    "first-accepted.jsonl": "32379aff610cb7d0a69b5ab3ff77213d5a4c97588a6d5f112336813c7bf285e3",
+    "later-accepted.jsonl": "c7e2b3699439588abe299b763b983937a6aad95f9f5f6c4e89d3c93f664d6601"
+  }
+}

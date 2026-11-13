@@ -1,0 +1,1041 @@
+{
+  "name": "Review recurring supplier imports and replay corrections with ContentSweep",
+  "nodes": [
+    {
+      "id": "run-manually",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        160
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "config",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        420,
+        160
+      ],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"baseUrl\": \"https://mcp.contentsweep.ai\", \"feedCsv\": \"product_code,product_name,unit_price,currency,available\\n000123,Desk lamp,\\\"19,90\\\",EUR,12\\n000124,Reading light,\\\"24,50\\\",EUR,8\\n\", \"approvedByOperator\": false, \"profileId\": \"YOUR_APPROVED_PROFILE_ID\", \"originalJobId\": \"\", \"idempotencyKey\": \"YOUR_UNIQUE_IMPORT_KEY\", \"correctionReplay\": false, \"resumeQuoteId\": \"\", \"resumeInputHash\": \"\", \"pollLimit\": 25}"
+      }
+    },
+    {
+      "id": "operator-approved",
+      "name": "Operator approved",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        740,
+        160
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $('Config').first().json.approvedByOperator === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "upload",
+      "name": "Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1060,
+        1000
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/uploads?format=csv' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/csv",
+        "body": "={{ $('Config').first().json.feedCsv }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "quote",
+      "name": "Quote",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        1200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/quotes' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {upload_id: $('Upload').first().json.id, profile_id: $('Config').first().json.profileId} }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "compatible-source",
+      "name": "Compatible source",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2380,
+        1200
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.retryRequested === true || ($json.status === 'quoted' && $json.funded === true) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "start-job",
+      "name": "Start job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        1200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {quote_id: $('Use quote').first().json.id, idempotency_key: $('Config').first().json.idempotencyKey} }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "wait",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        680
+      ],
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "job-status",
+      "name": "Job status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3440,
+        680
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "terminal-job",
+      "name": "Terminal job",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3760,
+        680
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ ['completed','failed'].includes($json.status) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "polling-budget",
+      "name": "Polling budget",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3760,
+        1000
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $runIndex < $('Config').first().json.pollLimit }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "completed-evaluation",
+      "name": "Completed evaluation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4080,
+        680
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status === 'completed' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "validation-report",
+      "name": "Validation report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        1760
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id + '/report' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "accepted-output",
+      "name": "Accepted output",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2220,
+        1760
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.verdict === 'passed' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "download-jsonl",
+      "name": "Download JSONL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3180,
+        1760
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id + '/output' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "normalizedFeed"
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "id": "resume-requested",
+      "name": "Resume requested",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        100,
+        680
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $('Config').first().json.resumeQuoteId !== '' }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "load-prior-quote",
+      "name": "Load prior quote",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1740,
+        680
+      ],
+      "parameters": {
+        "jsCode": "const c=$('Config').first().json;return [{json:{id:c.resumeQuoteId,input_hash:c.resumeInputHash,retryRequested:true}}];"
+      }
+    },
+    {
+      "name": "Verify retry identity",
+      "id": "verify-retry-identity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        680
+      ],
+      "parameters": {
+        "jsCode": "const c=$('Config').first().json; const hash=require('crypto').createHash('sha256').update(c.feedCsv,'utf8').digest('hex');if($json.input_hash!==hash)throw new Error('Retry bytes differ from the original quote. Review a new import.');return [{json:$json}];"
+      }
+    },
+    {
+      "name": "Use quote",
+      "id": "use-quote",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        1200
+      ],
+      "parameters": {
+        "jsCode": "return $input.all();"
+      }
+    },
+    {
+      "id": "correction-requested",
+      "name": "Correction requested",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        100,
+        1000
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $('Config').first().json.correctionReplay === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "original-rejected-job",
+      "name": "Original rejected job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        1000
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Config').first().json.originalJobId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "name": "Confirm corrected bytes",
+      "id": "confirm-corrected-bytes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        740,
+        1000
+      ],
+      "parameters": {
+        "jsCode": "const c=$('Config').first().json; const hash=require('crypto').createHash('sha256').update(c.feedCsv,'utf8').digest('hex');if($json.status!=='completed'||$json.verdict!=='rejected'||!$json.receipt||$json.receipt.input_hash===hash)throw new Error('Correction requires a completed rejection and genuinely changed bytes.');return [{json:{correctionReviewed:true}}];"
+      }
+    },
+    {
+      "name": "Validate configuration",
+      "id": "validate-configuration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        160
+      ],
+      "parameters": {
+        "jsCode": "const c=$('Config').first().json;\nconst configured=v=>typeof v==='string' && v.trim()!=='' && !v.startsWith('YOUR_');\nif(!configured(c.profileId)||!configured(c.idempotencyKey)||typeof c.feedCsv!=='string'||c.feedCsv.trim()==='')throw new Error('Configure the approved profile, source CSV and a fresh stable retry key.');\nif(!Number.isInteger(c.pollLimit)||c.pollLimit<1||c.pollLimit>25)throw new Error('pollLimit must be an integer from 1 to 25.');\nif(typeof c.correctionReplay!=='boolean'||typeof c.resumeQuoteId!=='string'||typeof c.resumeInputHash!=='string')throw new Error('Use boolean correctionReplay and string recovery fields.');\nif(c.correctionReplay&&c.resumeQuoteId!=='')throw new Error('Choose correction replay or recovery, not both.');\nif(c.correctionReplay&&!configured(c.originalJobId))throw new Error('Correction replay needs the completed rejected job ID.');\nif(c.resumeQuoteId!==''&&!/^[a-f0-9]{64}$/.test(c.resumeInputHash))throw new Error('Recovery needs the original input SHA256.');\nreturn $input.all();"
+      }
+    },
+    {
+      "name": "Review required",
+      "id": "review-required",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        1480
+      ],
+      "parameters": {
+        "jsCode": "throw new Error('Stopped before downstream preview. Review approval, source drift, funding, rejection, failure or polling deadline. Preserve the original quote and key on uncertain retries.');"
+      }
+    },
+    {
+      "id": "accepted-receipt",
+      "name": "Accepted receipt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        1760
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Config').first().json.baseUrl + '/v1/feeds/jobs/' + $('Start job').first().json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "CONFIGURE_IN_N8N",
+          "name": "ContentSweep X-API-Key"
+        }
+      }
+    },
+    {
+      "name": "Verified inventory preview",
+      "id": "verified-inventory-preview",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3660,
+        1760
+      ],
+      "parameters": {
+        "jsCode": "const bytes=await this.helpers.getBinaryDataBuffer(0,'normalizedFeed');\nconst receipt=$('Accepted receipt').first().json.receipt;\nconst hash=require('crypto').createHash('sha256').update(bytes).digest('hex');\nif(!receipt||receipt.verdict!=='passed'||hash!==receipt.output_hash)throw new Error('Output fingerprint verification failed.');\nconst rows=bytes.toString('utf8').trim().split('\\n').filter(Boolean).map(line=>JSON.parse(line));\nreturn [{json:{mode:'Preview only; no external inventory write',verifiedArtifactHash:hash,rowCount:rows.length,inventory:rows}}];"
+      }
+    },
+    {
+      "name": "Overview",
+      "id": "note-overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        0
+      ],
+      "parameters": {
+        "content": "### How it works\nCatalog operators can check each supplier CSV against an approved ContentSweep profile. Run manually to upload, quote, evaluate and inspect validated JSONL. Changed columns or rejected rows stop delivery. Accepted output is checked against the receipt SHA256 before all inventory fields appear locally. This workflow ends at the preview; it does not update a shop.\n\n### Setup\nTested on self-hosted n8n 2.42.5 with built-in nodes. Enable NODE_FUNCTION_ALLOW_BUILTIN=crypto on n8n and its task runner. Verify a Supplier Feeds organization at https://mcp.contentsweep.ai/account/sign-in?product=supplier-feeds. In the application, approve the CSV field meanings, identifier types, decimal locale, currency and contract. Fixture mapping: product_code\u2192sku (text), product_name\u2192title (text), unit_price\u2192price (comma-decimal string), currency\u2192currency (EUR), available\u2192stock (nonnegative integer); require unique sku.\n\nCreate HTTP Header Auth named ContentSweep X-API-Key: header X-API-Key, value your private organization key. Select it on all eight HTTP Request nodes. In Config, keep baseUrl, the included feedCsv and pollLimit=25; set profileId and a fresh idempotencyKey. Leave correctionReplay=false and recovery fields empty. Review the evaluation cost, set approvedByOperator=true, then execute. Expect two preview rows, SKU \"000123\" and price \"19.90\" as strings. Also test an empty feed and changed header; neither may produce a preview. Five trials are available per verified organization; funded access is needed afterward. Completed rejections consume one evaluation.\n\n### Customization\nReplace feedCsv for later deliveries. For corrections, enable correctionReplay, set originalJobId and change the bytes/key. For recovery, set resumeQuoteId/resumeInputHash and retain the original bytes/key. pollLimit accepts 1\u201325 retries. Changed structure needs a newly approved profile. Guide: https://mcp.contentsweep.ai/imports/workflows",
+        "width": 920,
+        "height": 620,
+        "color": 1
+      }
+    },
+    {
+      "name": "1 Configure and authorize",
+      "id": "note-1-configure-and-authorize",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "content": "## 1 \u00b7 Configure and authorize\nSet Config, select the header credential, and approve one evaluation. Invalid configuration stops before any HTTP request.",
+        "width": 1400,
+        "height": 400,
+        "color": 7
+      }
+    },
+    {
+      "name": "2 Choose the delivery path",
+      "id": "note-2-choose-the-delivery-path",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        520
+      ],
+      "parameters": {
+        "content": "## 2 \u00b7 Choose the delivery path\nUse a compatible delivery or a genuinely corrected rejection. Recovery takes the upper branch and reuses the original authorization.",
+        "width": 1400,
+        "height": 720,
+        "color": 7
+      }
+    },
+    {
+      "name": "3 Recover the original quote",
+      "id": "note-3-recover-the-original-quote",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        520
+      ],
+      "parameters": {
+        "content": "## 3 \u00b7 Recover the original quote\nVerify the original bytes before reusing a quote. Recovery never uploads or quotes again; it continues at Use quote below.",
+        "width": 820,
+        "height": 400,
+        "color": 7
+      }
+    },
+    {
+      "name": "4 Quote and start",
+      "id": "note-4-quote-and-start",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        1040
+      ],
+      "parameters": {
+        "content": "## 4 \u00b7 Quote and start\nFresh and recovered quotes meet at Use quote. Structure and credit checks stop drift or insufficient funding before a job starts.",
+        "width": 1320,
+        "height": 400,
+        "color": 7
+      }
+    },
+    {
+      "name": "5 Wait within a budget",
+      "id": "note-5-wait-within-a-budget",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        520
+      ],
+      "parameters": {
+        "content": "## 5 \u00b7 Wait within a budget\nPoll until completion or failure. A deadline stops for review; retain the original quote and key because the job may still finish.",
+        "width": 1460,
+        "height": 720,
+        "color": 7
+      }
+    },
+    {
+      "name": "6 Verify and preview",
+      "id": "note-6-verify-and-preview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        1600
+      ],
+      "parameters": {
+        "content": "## 6 \u00b7 Verify and preview\nA passing report permits the download. The receipt must match its exact bytes before the complete inventory preview appears. No downstream system is updated.",
+        "width": 2840,
+        "height": 420,
+        "color": 7
+      }
+    },
+    {
+      "name": "Stop for review",
+      "id": "note-stop-for-review",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        920,
+        1340
+      ],
+      "parameters": {
+        "content": "## Review required\nNo preview was delivered. Inspect the failed branch. Preserve the original quote and key before retrying an uncertain job.",
+        "width": 500,
+        "height": 340,
+        "color": 3
+      }
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Operator approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operator approved": {
+      "main": [
+        [
+          {
+            "node": "Validate configuration",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Review required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload": {
+      "main": [
+        [
+          {
+            "node": "Quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quote": {
+      "main": [
+        [
+          {
+            "node": "Use quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compatible source": {
+      "main": [
+        [
+          {
+            "node": "Start job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Review required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start job": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Job status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job status": {
+      "main": [
+        [
+          {
+            "node": "Terminal job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminal job": {
+      "main": [
+        [
+          {
+            "node": "Completed evaluation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Polling budget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Polling budget": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Review required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completed evaluation": {
+      "main": [
+        [
+          {
+            "node": "Validation report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Review required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation report": {
+      "main": [
+        [
+          {
+            "node": "Accepted output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted output": {
+      "main": [
+        [
+          {
+            "node": "Accepted receipt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Review required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume requested": {
+      "main": [
+        [
+          {
+            "node": "Load prior quote",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Correction requested",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load prior quote": {
+      "main": [
+        [
+          {
+            "node": "Verify retry identity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify retry identity": {
+      "main": [
+        [
+          {
+            "node": "Use quote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correction requested": {
+      "main": [
+        [
+          {
+            "node": "Original rejected job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Original rejected job": {
+      "main": [
+        [
+          {
+            "node": "Confirm corrected bytes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm corrected bytes": {
+      "main": [
+        [
+          {
+            "node": "Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate configuration": {
+      "main": [
+        [
+          {
+            "node": "Resume requested",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use quote": {
+      "main": [
+        [
+          {
+            "node": "Compatible source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted receipt": {
+      "main": [
+        [
+          {
+            "node": "Download JSONL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download JSONL": {
+      "main": [
+        [
+          {
+            "node": "Verified inventory preview",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

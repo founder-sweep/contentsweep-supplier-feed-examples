@@ -1,0 +1,99 @@
+{
+  "target_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "sku": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "price": {
+        "type": "string",
+        "format": "decimal"
+      },
+      "currency": {
+        "type": "string",
+        "enum": [
+          "EUR"
+        ]
+      },
+      "stock": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "required": [
+      "sku",
+      "title",
+      "price",
+      "currency",
+      "stock"
+    ]
+  },
+  "mapping": [
+    {
+      "source": "product_code",
+      "target": "sku",
+      "operation": "copy"
+    },
+    {
+      "source": "product_name",
+      "target": "title",
+      "operation": "copy"
+    },
+    {
+      "source": "unit_price",
+      "target": "price",
+      "operation": "decimal",
+      "decimal_separator": ","
+    },
+    {
+      "source": "currency",
+      "target": "currency",
+      "operation": "copy"
+    },
+    {
+      "source": "available",
+      "target": "stock",
+      "operation": "integer"
+    }
+  ],
+  "source_structure": {
+    "fields": [
+      "available",
+      "currency",
+      "product_code",
+      "product_name",
+      "unit_price"
+    ],
+    "types": {
+      "available": [
+        "string"
+      ],
+      "currency": [
+        "string"
+      ],
+      "product_code": [
+        "string"
+      ],
+      "product_name": [
+        "string"
+      ],
+      "unit_price": [
+        "string"
+      ]
+    },
+    "fingerprint": "f7dd6d9a34eab0cee30fa6cf211ff5bb9a4395cbe67a705c8816bc6c97665cc9"
+  },
+  "contract": {
+    "rules": [
+      {
+        "id": "unique-sku",
+        "type": "unique",
+        "column": "sku"
+      }
+    ]
+  }
+}

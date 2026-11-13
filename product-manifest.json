@@ -38,5 +38,49 @@
     "TOOL_REFERENCE.md": "0fbb6f6b52f812b53b4aee7f08e84ca5af0e43b99b546b6c22be5976469af79f",
     "SKILL.md": "ec15fa8c6df126adb7ffc394b7bcab90423abe323ac3a2223091cdabe0c71119",
     "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "demo": {
+    "url": "https://mcp.contentsweep.ai/imports/demos/recurring-profile",
+    "slug": "recurring-profile",
+    "title": "Reuse a supplier mapping and stop structural drift",
+    "cases": [
+      "first",
+      "later",
+      "drift"
+    ],
+    "default_mode": "hosted",
+    "package_path": "demo",
+    "max_units": 2,
+    "campaign": "supplier-feeds-pilot",
+    "artifact_hashes": {
+      "N8N_GUIDE.md": "26dc29993e97180f91d8c53d4b8c187991fe9f1499281349002ff6479035bdbf",
+      "drift.csv": "daf840c544e4612fe7722ef7bf5bd6e096d7ebf267015d5eef22317ae38f9e5c",
+      "later.csv": "bce2719dcc79cef5d2d46299d1b278995426c9ca9fe2f078052ca81bc44c0753",
+      "profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
+      "recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+      "supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5"
+    },
+    "archive_sha256": "68d6eec3df6b35c848c47fbcfb27e215cf30f0632744ffa4a952e2a950c7645f",
+    "recorded_result_sha256": "dbf61f29166a1ad85baf03f1b66d8d44ca95daa5ca06f2b7a44e688b85750f66",
+    "agent_status": "passed",
+    "fixtures_path": "demo/fixtures",
+    "source_base_commit": "78b194fe6ee75d9a98602bc88cacb9f096e6d979",
+    "files": {
+      "AGENT_PROMPT.md": "7cbb234c08e64f7ba7e9c99244f174b860d0c666630fcd65f00069c0ce21f3b3",
+      "README.md": "012e97e9cdded8fb07373dd906fca3e05554c08068d1b4c07bf8fcbeb15d6bc6",
+      "agent-evidence.json": "1638cf807dbc17d82602397dbfe1fa9d8713c9aefba6a41f9a5ce7e6de4adde9",
+      "expected.json": "a4331a9c8852ecebe0e55389db84f4830d581120fd0a8d9ec93c6025f4a265c4",
+      "fixtures/N8N_GUIDE.md": "26dc29993e97180f91d8c53d4b8c187991fe9f1499281349002ff6479035bdbf",
+      "fixtures/drift.csv": "daf840c544e4612fe7722ef7bf5bd6e096d7ebf267015d5eef22317ae38f9e5c",
+      "fixtures/later.csv": "bce2719dcc79cef5d2d46299d1b278995426c9ca9fe2f078052ca81bc44c0753",
+      "fixtures/profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
+      "fixtures/recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+      "fixtures/supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5",
+      "manifest.json": "9848707c9e62266df915bb5ba9d7fa734f475e5d0f799513302c15d8f74431de",
+      "recorded/first-accepted.jsonl": "32379aff610cb7d0a69b5ab3ff77213d5a4c97588a6d5f112336813c7bf285e3",
+      "recorded/later-accepted.jsonl": "c7e2b3699439588abe299b763b983937a6aad95f9f5f6c4e89d3c93f664d6601",
+      "run.py": "2376130d1534c3a3122eac183c1e01ec9da050de9ac6045b9d4c790bde572aae",
+      "transfer.py": "125aede5160f1f291daa86d6f183d1faf5b470a2ed503f945e79af995d86bd2b"
+    }
   }
 }

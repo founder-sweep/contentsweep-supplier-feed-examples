@@ -1,0 +1,246 @@
+{
+  "evidence_kind": "Recorded deterministic MCP execution of owned synthetic fixtures; not a customer outcome",
+  "execution": "deterministic MCP client; not a native agent transcript",
+  "fixtures_sha256": {
+    "N8N_GUIDE.md": "26dc29993e97180f91d8c53d4b8c187991fe9f1499281349002ff6479035bdbf",
+    "drift.csv": "daf840c544e4612fe7722ef7bf5bd6e096d7ebf267015d5eef22317ae38f9e5c",
+    "later.csv": "bce2719dcc79cef5d2d46299d1b278995426c9ca9fe2f078052ca81bc44c0753",
+    "profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
+    "recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
+    "supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5"
+  },
+  "internal_noncash_qualification": true,
+  "mode": "hosted",
+  "original_result_sha256": "dbf61f29166a1ad85baf03f1b66d8d44ca95daa5ca06f2b7a44e688b85750f66",
+  "product": "feeds",
+  "recorded_at": "2026-11-13T16:12:42.282753+00:00",
+  "result": {
+    "deliveries": [
+      {
+        "case": "first",
+        "output_sha256": "32379aff610cb7d0a69b5ab3ff77213d5a4c97588a6d5f112336813c7bf285e3",
+        "report": {
+          "error_count": 0,
+          "errors": [
+            
+          ],
+          "errors_truncated": false,
+          "evaluated_rows": 2,
+          "full_file_validation": true,
+          "quality_gate": {
+            "coverage": {
+              "policy": "analyzed",
+              "profile": "analyzed"
+            },
+            "findings": [
+              
+            ],
+            "generated_at": "2026-11-13T15:05:17.522246Z",
+            "input_fingerprint": null,
+            "metadata": {
+              "contract": {
+                "rules": [
+                  {
+                    "column": "sku",
+                    "id": "unique-sku",
+                    "type": "unique"
+                  }
+                ]
+              },
+              "profile": {
+                "columns": {
+                  "currency": {
+                    "distinct_count": 1,
+                    "null_count": 0
+                  },
+                  "price": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "sku": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "stock": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "title": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  }
+                },
+                "row_count": 2
+              }
+            },
+            "product": "data-quality-gate",
+            "schema_version": "1.0",
+            "verdict": "continue"
+          },
+          "row_count": 2,
+          "semantic_guarantee": "approved mapping and explicitly configured checks only",
+          "verdict": "passed"
+        },
+        "retry_same_job": true,
+        "rows": [
+          {
+            "currency": "EUR",
+            "price": "19.90",
+            "sku": "000123",
+            "stock": 12,
+            "title": "Desk lamp"
+          },
+          {
+            "currency": "EUR",
+            "price": "24.50",
+            "sku": "000124",
+            "stock": 8,
+            "title": "Reading light"
+          }
+        ]
+      },
+      {
+        "case": "later",
+        "output_sha256": "c7e2b3699439588abe299b763b983937a6aad95f9f5f6c4e89d3c93f664d6601",
+        "report": {
+          "error_count": 0,
+          "errors": [
+            
+          ],
+          "errors_truncated": false,
+          "evaluated_rows": 2,
+          "full_file_validation": true,
+          "quality_gate": {
+            "coverage": {
+              "policy": "analyzed",
+              "profile": "analyzed"
+            },
+            "findings": [
+              
+            ],
+            "generated_at": "2026-11-13T15:05:24.951462Z",
+            "input_fingerprint": null,
+            "metadata": {
+              "contract": {
+                "rules": [
+                  {
+                    "column": "sku",
+                    "id": "unique-sku",
+                    "type": "unique"
+                  }
+                ]
+              },
+              "profile": {
+                "columns": {
+                  "currency": {
+                    "distinct_count": 1,
+                    "null_count": 0
+                  },
+                  "price": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "sku": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "stock": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  },
+                  "title": {
+                    "distinct_count": 2,
+                    "null_count": 0
+                  }
+                },
+                "row_count": 2
+              }
+            },
+            "product": "data-quality-gate",
+            "schema_version": "1.0",
+            "verdict": "continue"
+          },
+          "row_count": 2,
+          "semantic_guarantee": "approved mapping and explicitly configured checks only",
+          "verdict": "passed"
+        },
+        "retry_same_job": true,
+        "rows": [
+          {
+            "currency": "EUR",
+            "price": "19.90",
+            "sku": "000123",
+            "stock": 13,
+            "title": "Desk lamp"
+          },
+          {
+            "currency": "EUR",
+            "price": "24.50",
+            "sku": "000124",
+            "stock": 8,
+            "title": "Reading light"
+          }
+        ]
+      }
+    ],
+    "destination": "local preview only",
+    "drift": {
+      "billable": false,
+      "reason": "source structure changed",
+      "source_structure": {
+        "fields": [
+          "available",
+          "currency",
+          "product_name",
+          "unit_price",
+          "vendor_sku"
+        ],
+        "fingerprint": "321dc357bc41eb2eac3906f77b999cf7e25ddf219e94d33c9d7a5755077a4fdc",
+        "types": {
+          "available": [
+            "string"
+          ],
+          "currency": [
+            "string"
+          ],
+          "product_name": [
+            "string"
+          ],
+          "unit_price": [
+            "string"
+          ],
+          "vendor_sku": [
+            "string"
+          ]
+        }
+      },
+      "status": "review_required"
+    },
+    "maximum_units": 2,
+    "same_approved_profile": true
+  },
+  "server": {
+    "description": "Map and validate bounded recurring supplier catalogs with approved profiles.",
+    "icons": null,
+    "name": "ai.contentsweep/supplier-feeds",
+    "title": null,
+    "version": "1.1.0",
+    "website_url": null
+  },
+  "status": "passed",
+  "synthetic": true,
+  "tools": [
+    "upload_supplier_feed",
+    "preview_supplier_feed",
+    "create_supplier_feed_profile",
+    "list_supplier_feed_profiles",
+    "get_supplier_feed_profile",
+    "delete_supplier_feed_profile",
+    "approve_supplier_feed_profile",
+    "quote_supplier_import",
+    "start_supplier_import",
+    "get_supplier_import",
+    "get_supplier_import_report",
+    "get_supplier_import_output"
+  ]
+}

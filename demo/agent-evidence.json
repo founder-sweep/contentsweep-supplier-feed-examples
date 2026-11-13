@@ -1,0 +1,35 @@
+{
+  "product": "feeds",
+  "status": "passed",
+  "reason": null,
+  "client": "Gemini CLI",
+  "client_version": "0.68.0",
+  "models_observed": [
+    "gemini-3.5-flash-lite"
+  ],
+  "assertions": [
+    "two complete deliveries",
+    "one approved profile reused",
+    "identifiers and decimals exact",
+    "output hashes verified",
+    "same-key retry",
+    "structural drift stops without debit"
+  ],
+  "synthetic": true,
+  "internal_noncash": true,
+  "customer_outcome": false,
+  "native_mcp_tool_counts": {
+    "upload_supplier_feed": 3,
+    "create_supplier_feed_profile": 1,
+    "approve_supplier_feed_profile": 1,
+    "quote_supplier_import": 4,
+    "start_supplier_import": 4,
+    "get_supplier_import": 4,
+    "get_supplier_import_report": 2,
+    "get_supplier_import_output": 2
+  },
+  "logs_sha256": {
+    "gemini-feeds-native.jsonl": "aa96bc9b7386144de8012bf5c9d6eab5766e7dccec007342b7e2f3c4ae1e750e"
+  },
+  "transport_note": "Native MCP workflow; exact fixture transfer may use a reviewed native shell helper. Deterministic byte checks are recorded separately."
+}

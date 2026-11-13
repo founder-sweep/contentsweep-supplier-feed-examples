@@ -1,7 +1,7 @@
 {
   "name": "contentsweep-supplier-feeds",
   "version": "1.0.0",
-  "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift.",
+  "description": "Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts.",
   "mcpServers": {
     "contentsweep-supplier-feeds": {
       "headers": {

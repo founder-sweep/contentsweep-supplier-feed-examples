@@ -1,6 +1,17 @@
 # Supplier Feeds: coding-agent setup
 
-Reuse approved supplier mappings, validate complete flat files and stop structural drift.
+<!-- contentsweep-proven-capability:begin -->
+**Fully capable of recurring flat-file supplier imports using explicitly approved profiles.**
+
+Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts.
+
+Two compatible deliveries reuse one approved profile, preserve SKU 000123 and price 19.90, verify complete output hashes, and stop changed headers. Exact retries reuse the original job.
+
+[Inspect the result and repeat the demo](https://mcp.contentsweep.ai/imports/demos/recurring-profile) · [Runnable package](demo/README.md) · [Capability and verification details](CAPABILITIES.md)
+<!-- contentsweep-proven-capability:end -->
+
+
+Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts.
 
 ## Runtime and credentials
 

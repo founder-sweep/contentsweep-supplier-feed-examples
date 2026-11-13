@@ -5,7 +5,7 @@
   "plugin": "contentsweep-supplier-feeds",
   "skill": "supplier-feed-import",
   "skill_path": "skills/contentsweep-supplier-feeds/SKILL.md",
-  "description": "Reuse approved supplier mappings, validate complete flat files and stop structural drift.",
+  "description": "Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts.",
   "homepage": "https://mcp.contentsweep.ai/imports",
   "mode": "hosted",
   "endpoint": "https://mcp.contentsweep.ai/v1/feeds/mcp/",
@@ -82,5 +82,20 @@
       "run.py": "2376130d1534c3a3122eac183c1e01ec9da050de9ac6045b9d4c790bde572aae",
       "transfer.py": "125aede5160f1f291daa86d6f183d1faf5b470a2ed503f945e79af995d86bd2b"
     }
+  },
+  "marketing": {
+    "product": "supplier-feeds",
+    "title": "Supplier Feeds",
+    "description": "Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts.",
+    "capability": "Fully capable of recurring flat-file supplier imports using explicitly approved profiles.",
+    "proof": "Two compatible deliveries reuse one approved profile, preserve SKU 000123 and price 19.90, verify complete output hashes, and stop changed headers. Exact retries reuse the original job.",
+    "scope": "Flat CSV/JSONL, approved mappings, 10 MiB, 50,000 records, 100 fields. No automatic destination writes.",
+    "homepage": "https://mcp.contentsweep.ai/imports",
+    "demo_url": "https://mcp.contentsweep.ai/imports/demos/recurring-profile",
+    "recorded_result_url": "https://mcp.contentsweep.ai/imports/demos/recurring-profile/expected.json",
+    "agent_evidence_url": "https://mcp.contentsweep.ai/imports/demos/recurring-profile/agent-evidence.json",
+    "demo_archive_sha256": "9eac8b2eb10eaa45659438b1c32769ed0afc32d4e9d220bc54c8b19d4d2fa8f5",
+    "verification": "passed repeatable synthetic MCP workflows",
+    "native_gemini_capture": "passed"
   }
 }

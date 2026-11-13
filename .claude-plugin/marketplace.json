@@ -5,47 +5,53 @@
     "email": "founder@contentsweep.ai"
   },
   "metadata": {
-    "description": "Reviewed imports, full-file preflight, release inspection, schema mapping, exported Airflow diagnosis and read-only FastAPI assessment."
+    "description": "Fully capable tools for supported data and release workflows, proven with repeatable public demos."
   },
   "plugins": [
     {
       "name": "contentsweep-supplier-feeds",
-      "source": "./"
+      "source": "./",
+      "description": "Proven recurring supplier imports: approve and reuse profiles, preserve SKUs and decimals, and stop drift. Repeatable demo with verified receipts."
     },
     {
       "name": "contentsweep-quality",
       "source": {
         "source": "github",
         "repo": "founder-sweep/data-quality-gate-examples"
-      }
+      },
+      "description": "Proven whole-file preflight for CRM imports, with continue, block and warning decisions. Repeatable demo catches a duplicate at row 12,002."
     },
     {
       "name": "contentsweep-inspector",
       "source": {
         "source": "github",
         "repo": "founder-sweep/production-readiness-inspector"
-      }
+      },
+      "description": "Proven local Python/FastAPI release inspection and before/after handoffs. Repeatable demo resolves ten findings without source upload or execution."
     },
     {
       "name": "contentsweep-schema-mapper",
       "source": {
         "source": "github",
         "repo": "founder-sweep/contentsweep-schema-mapper"
-      }
+      },
+      "description": "Proven reviewed vendor mapping with exact identifiers and decimals, reusable transforms and drift stops. Includes a repeatable local MCP demo."
     },
     {
       "name": "contentsweep-dag-doctor",
       "source": {
         "source": "github",
         "repo": "founder-sweep/contentsweep-dag-doctor"
-      }
+      },
+      "description": "Proven exported Airflow incident diagnosis with evidence-linked findings. Repeatable hosted and free local demos show executor mismatch and context stops."
     },
     {
       "name": "contentsweep-deployment-fixer",
       "source": {
         "source": "github",
         "repo": "founder-sweep/contentsweep-deployment-fixer"
-      }
+      },
+      "description": "Proven static FastAPI deployment assessments with file-linked blockers and support checks. Repeatable hosted and free local demos; no builds or AWS actions."
     }
   ]
 }

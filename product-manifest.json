@@ -60,11 +60,11 @@
       "recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
       "supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5"
     },
-    "archive_sha256": "68d6eec3df6b35c848c47fbcfb27e215cf30f0632744ffa4a952e2a950c7645f",
+    "archive_sha256": "9eac8b2eb10eaa45659438b1c32769ed0afc32d4e9d220bc54c8b19d4d2fa8f5",
     "recorded_result_sha256": "dbf61f29166a1ad85baf03f1b66d8d44ca95daa5ca06f2b7a44e688b85750f66",
     "agent_status": "passed",
     "fixtures_path": "demo/fixtures",
-    "source_base_commit": "78b194fe6ee75d9a98602bc88cacb9f096e6d979",
+    "source_base_commit": "2fef4a09f5c867996a7b98f0322da7038fd69cf4",
     "files": {
       "AGENT_PROMPT.md": "7cbb234c08e64f7ba7e9c99244f174b860d0c666630fcd65f00069c0ce21f3b3",
       "README.md": "012e97e9cdded8fb07373dd906fca3e05554c08068d1b4c07bf8fcbeb15d6bc6",
@@ -76,7 +76,7 @@
       "fixtures/profile.json": "f6deff955f198daf6b7d8cd8ad55ab293ecabdf415dd9daf24f9a4690ffa7c83",
       "fixtures/recurring-import-reviewed.n8n.json": "b0a9b333c8b2cfa514b41a4175524fb15e5f2e5169386263e0baf7ef93dbde78",
       "fixtures/supplier.csv": "af29c3d81b82f2493ab5102138d20d4ca12a4f4db1e036042e42228ea7a512f5",
-      "manifest.json": "9848707c9e62266df915bb5ba9d7fa734f475e5d0f799513302c15d8f74431de",
+      "manifest.json": "285661fe6660205c10e4b388ce46e8a3a41ec9e75207fd9d14aa92985f0baf82",
       "recorded/first-accepted.jsonl": "32379aff610cb7d0a69b5ab3ff77213d5a4c97588a6d5f112336813c7bf285e3",
       "recorded/later-accepted.jsonl": "c7e2b3699439588abe299b763b983937a6aad95f9f5f6c4e89d3c93f664d6601",
       "run.py": "2376130d1534c3a3122eac183c1e01ec9da050de9ac6045b9d4c790bde572aae",

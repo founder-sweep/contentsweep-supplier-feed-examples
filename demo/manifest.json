@@ -46,8 +46,8 @@
   },
   "source_provenance": {
     "product_base_commit": "261d302bc012c26cbacbfca5d71ec80714fa4c92",
-    "distribution_base_commit": "78b194fe6ee75d9a98602bc88cacb9f096e6d979",
-    "generator_sha256": "0b393f8d142a558d511da51de447e61711a77796cbfc37542bb191a43c2afae4"
+    "distribution_base_commit": "2fef4a09f5c867996a7b98f0322da7038fd69cf4",
+    "generator_sha256": "98714b4e461984dccc9a396ac012ccb2b33a7c196259efd97b269bcb55fd2dfb"
   },
   "transfer_sha256": "125aede5160f1f291daa86d6f183d1faf5b470a2ed503f945e79af995d86bd2b",
   "supplemental_sha256": {
